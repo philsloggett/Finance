@@ -585,33 +585,33 @@ const fyOfMonth = m => {
 };
 
 async function openCharts() {
-  if (!VIZ.data) {
-    VIZ.data = (await (await fetch("/api/charts")).json());
-    const fys = [...new Set(VIZ.data.rows.map(r => fyOfMonth(r.month)))].sort();
-    $("viz-fy").innerHTML = `<option value="all">All time</option>`
-      + fys.map(f => `<option value="${f}">FY ${f}</option>`).join("");
-    for (const mode of ["spend", "income"]) {
-      const tot = {};
-      for (const r of VIZ.data.rows) tot[r.cat] = (tot[r.cat] ?? 0) + r[mode];
-      const ranked = Object.entries(tot).filter(([c, v]) => v > 0 && c !== "(unclassified)")
-        .sort((a, b) => b[1] - a[1]).map(([c]) => c);
-      VIZ.topCats[mode] = ranked.slice(0, 7);
-      VIZ.colorMap[mode] = new Map(ranked.slice(0, 7).map((c, i) => [c, VIZ.slots[i]]));
-    }
-    $("viz-fy").onchange = () => { VIZ.fy = $("viz-fy").value; renderViz(); };
-    for (const b of $("viz-mode").querySelectorAll("button"))
-      b.onclick = () => {
-        VIZ.mode = b.dataset.m; VIZ.hidden = new Set(); VIZ.inited = false;
-        for (const x of $("viz-mode").querySelectorAll("button"))
-          x.classList.toggle("on", x === b);
-        renderViz();
-      };
-    const exN = VIZ.data.excluded.length;
-    const exSum = VIZ.data.excluded.reduce((a, t) => a + Math.abs(t.amount), 0);
-    $("viz-note").textContent = exN
-      ? `Excludes ${exN} txns ≥ $100k (${fmt$(exSum)} — press f to inspect) and transfers.`
-      : "Transfers excluded.";
+  VIZ.data = (await (await fetch("/api/charts")).json());  // always fresh
+  const fys = [...new Set(VIZ.data.rows.map(r => fyOfMonth(r.month)))].sort();
+  $("viz-fy").innerHTML = `<option value="all">All time</option>`
+    + fys.map(f => `<option value="${f}">FY ${f}</option>`).join("");
+  if (![...$("viz-fy").options].some(o => o.value === VIZ.fy)) VIZ.fy = "all";
+  $("viz-fy").value = VIZ.fy;
+  for (const mode of ["spend", "income"]) {
+    const tot = {};
+    for (const r of VIZ.data.rows) tot[r.cat] = (tot[r.cat] ?? 0) + r[mode];
+    const ranked = Object.entries(tot).filter(([c, v]) => v > 0 && c !== "(unclassified)")
+      .sort((a, b) => b[1] - a[1]).map(([c]) => c);
+    VIZ.topCats[mode] = ranked.slice(0, 7);
+    VIZ.colorMap[mode] = new Map(ranked.slice(0, 7).map((c, i) => [c, VIZ.slots[i]]));
   }
+  $("viz-fy").onchange = () => { VIZ.fy = $("viz-fy").value; renderViz(); };
+  for (const b of $("viz-mode").querySelectorAll("button"))
+    b.onclick = () => {
+      VIZ.mode = b.dataset.m; VIZ.hidden = new Set(); VIZ.inited = false;
+      for (const x of $("viz-mode").querySelectorAll("button"))
+        x.classList.toggle("on", x === b);
+      renderViz();
+    };
+  const exN = VIZ.data.excluded.length;
+  const exSum = VIZ.data.excluded.reduce((a, t) => a + Math.abs(t.amount), 0);
+  $("viz-note").textContent = exN
+    ? `Excludes ${exN} txns ≥ $100k (${fmt$(exSum)} — press f to inspect) and transfers.`
+    : "Transfers excluded.";
   renderViz();
   $("viz").showModal();
 }
