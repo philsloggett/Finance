@@ -8,6 +8,10 @@ accounts:
     name: CommBank credit card
     kind: credit_card
     institution: legacy_sheet
+  netbank_saver:
+    name: NetBank Saver
+    kind: savings
+    institution: commbank_csv
 
 institutions:
   # NetBank "CSV" export: no header row; Date, Amount (signed, debits

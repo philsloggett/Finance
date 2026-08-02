@@ -14,34 +14,63 @@ def dollars(cents: int) -> str:
     return f"{'-' if cents < 0 else ''}${abs(cents) / 100:,.2f}"
 
 
+def _chrono(rows: list[sqlite3.Row]) -> list[sqlite3.Row]:
+    """Statement order: per-batch file order (flipped if newest-first), merged by date."""
+    batches: dict[int, list[sqlite3.Row]] = {}
+    for r in rows:
+        batches.setdefault(r["batch_id"], []).append(r)
+    keyed = []
+    for bid, rs in batches.items():
+        rs.sort(key=lambda r: r["rid"])  # rowid = insertion = file order
+        if rs[0]["date"] > rs[-1]["date"]:
+            rs.reverse()
+        keyed.extend((r["date"], bid, i, r) for i, r in enumerate(rs))
+    keyed.sort(key=lambda t: t[:3])
+    return [t[3] for t in keyed]
+
+
 def coverage(con: sqlite3.Connection) -> None:
     """Date span, gaps > 3 days, and balance-chain check per account (spec 4.3)."""
     for acct in con.execute("SELECT account_id FROM accounts ORDER BY account_id"):
         aid = acct["account_id"]
         rows = con.execute(
-            "SELECT date, amount, balance FROM transactions WHERE account_id = ? "
-            "ORDER BY date, txn_id",
+            "SELECT rowid AS rid, batch_id, date, amount, balance FROM transactions "
+            "WHERE account_id = ?",
             (aid,),
         ).fetchall()
         if not rows:
             print(f"{aid}: no data")
             continue
-        print(f"{aid}: {rows[0]['date']} -> {rows[-1]['date']}  ({len(rows)} txns)")
+        ordered = _chrono(rows)
+        print(f"{aid}: {ordered[0]['date']} -> {ordered[-1]['date']}  ({len(ordered)} txns)")
+        small = 0
         prev = None
-        for r in rows:
+        for r in ordered:
             d = date.fromisoformat(r["date"])
             if prev and (d - prev).days > 3:
-                print(f"  gap: {prev} -> {d}  ({(d - prev).days} days)")
+                if (d - prev).days >= 14:
+                    print(f"  gap: {prev} -> {d}  ({(d - prev).days} days)")
+                else:
+                    small += 1
             prev = d
-        if all(r["balance"] is None for r in rows):
+        if small:
+            print(f"  ({small} small gaps of 4-13 days — likely just low activity)")
+        with_bal = [r for r in ordered if r["balance"] is not None]
+        if not with_bal:
             print("  balance chain: no balances in source")
+            continue
+        breaks = []
+        for a, b in zip(ordered, ordered[1:]):
+            if a["balance"] is not None and b["balance"] is not None:
+                if a["balance"] + b["amount"] != b["balance"]:
+                    breaks.append((a["date"], b["date"]))
+        span = f"{with_bal[0]['date']} -> {with_bal[-1]['date']}"
+        if not breaks:
+            print(f"  balance chain: OK ({span})")
         else:
-            breaks = 0
-            for a, b in zip(rows, rows[1:]):
-                if a["balance"] is not None and b["balance"] is not None:
-                    if a["balance"] + b["amount"] != b["balance"]:
-                        breaks += 1
-            print(f"  balance chain: {'OK' if not breaks else f'{breaks} breaks'}")
+            print(f"  balance chain: {len(breaks)} breaks in {span}")
+            for a, b in breaks[:5]:
+                print(f"    break between {a} and {b}")
 
 
 def stats(con: sqlite3.Connection) -> None:

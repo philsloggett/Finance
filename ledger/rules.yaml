@@ -559,6 +559,13 @@ rules:
   budget: Clothing and Personal Care
   tax: null
   source: imported_legacy
+- id: decathlon-austral-tempe
+  match: exact
+  pattern: DECATHLON AUSTRAL TEMPE
+  budget: Clothing and Personal Care
+  tax: null
+  source: manual
+  added: '2026-08-02T11:09:03+00:00'
 - id: denimbirkenheadpoint-drummoyne
   match: exact
   pattern: DENIMBIRKENHEADPOINT DRUMMOYNE
@@ -2371,6 +2378,13 @@ rules:
   budget: Fast Food
   tax: null
   source: imported_legacy
+- id: brickfields-bakery-redfern
+  match: exact
+  pattern: BRICKFIELDS BAKERY REDFERN
+  budget: Fast Food
+  tax: null
+  source: manual
+  added: '2026-08-02T11:29:26+00:00'
 - id: brickfields-chippe-chippendale
   match: exact
   pattern: BRICKFIELDS CHIPPE CHIPPENDALE
@@ -3158,6 +3172,13 @@ rules:
   budget: Fast Food
   tax: null
   source: imported_legacy
+- id: hello-stranger-caf-ashfield
+  match: exact
+  pattern: HELLO STRANGER CAF ASHFIELD
+  budget: Fast Food
+  tax: null
+  source: manual
+  added: '2026-08-02T11:11:29+00:00'
 - id: hello-stranger-caf-haberfield
   match: exact
   pattern: HELLO STRANGER CAF HABERFIELD
@@ -4611,6 +4632,13 @@ rules:
   budget: Fast Food
   tax: null
   source: imported_legacy
+- id: zi-feng-pty-ltd-surry-hills-tap-and-pay
+  match: exact
+  pattern: ZI FENG PTY LTD SURRY HILLS TAP AND PAY
+  budget: Fast Food
+  tax: null
+  source: manual
+  added: '2026-08-02T11:29:12+00:00'
 - id: zlr-eq-convenience-moore-park
   match: exact
   pattern: ZLR*EQ CONVENIENCE MOORE PARK
@@ -8042,6 +8070,13 @@ rules:
   budget: Recreation Travel and Entertainment
   tax: null
   source: imported_legacy
+- id: transfer-to-faycal-benabdellaziz-netbank
+  match: exact
+  pattern: TRANSFER TO FAYCAL BENABDELLAZIZ NETBANK
+  budget: Recreation Travel and Entertainment
+  tax: null
+  source: manual
+  added: '2026-08-02T11:09:27+00:00'
 - id: transfer-to-kate-b-machin-commbank-app-a
   match: exact
   pattern: TRANSFER TO KATE B MACHIN COMMBANK APP A
