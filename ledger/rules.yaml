@@ -1319,6 +1319,12 @@ rules:
   budget: Communication
   tax: null
   source: imported_legacy
+- id: exetel
+  match: exact
+  pattern: EXETEL
+  budget: Communication
+  tax: null
+  source: llm_approved
 - id: fast-transfer-from-victor-polito-netflix
   match: exact
   pattern: FAST TRANSFER FROM VICTOR POLITO NETFLIX

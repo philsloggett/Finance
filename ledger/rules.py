@@ -55,6 +55,29 @@ def slugify(s: str) -> str:
     return re.sub(r"-+", "-", re.sub(r"[^a-z0-9]", "-", s.lower())).strip("-") or "rule"
 
 
+def append_rule(
+    match: str, pattern: str, budget: str, source: str, tax: str | None = None
+) -> str:
+    """Add one rule to rules.yaml, returning its id. Fails on duplicate pattern."""
+    existing = load_rules()
+    if any(r["match"] == match and r["pattern"] == pattern for r in existing):
+        raise ValueError(f"a {match} rule for {pattern!r} already exists")
+    used = {r["id"] for r in existing}
+    rule_id = slugify(pattern)
+    while rule_id in used:
+        rule_id += "-x"
+    existing.append(
+        {"id": rule_id, "match": match, "pattern": pattern,
+         "budget": budget, "tax": tax, "source": source}
+    )
+    save_rules(existing)
+    return rule_id
+
+
+def remove_rule(rule_id: str) -> None:
+    save_rules([r for r in load_rules() if r["id"] != rule_id])
+
+
 def seed_from_legacy(con: sqlite3.Connection) -> tuple[int, int]:
     """Convert unanimous legacy labels into exact rules (spec 4.2).
 

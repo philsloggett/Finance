@@ -1,0 +1,11 @@
+{
+  "version": "0.0.1",
+  "configurations": [
+    {
+      "name": "review-ui",
+      "runtimeExecutable": "python",
+      "runtimeArgs": ["-m", "ledger.cli", "review", "--no-browser"],
+      "port": 8765
+    }
+  ]
+}

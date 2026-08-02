@@ -1,0 +1,361 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Ledger — review</title>
+<style>
+  :root {
+    --cover: #1d2b22;        /* bottle-green book cover */
+    --cover-deep: #16211a;
+    --paper: #edefdf;        /* pale-green ledger paper */
+    --paper-line: #c9d1b4;   /* ruling */
+    --ink: #26301f;
+    --ink-faint: #6b7360;
+    --debit: #a03325;        /* red ink */
+    --credit: #2e6b44;       /* green ink */
+    --margin-rule: #c0442f;  /* the ledger margin line */
+    --gilt: #c9a648;         /* page-edge gilt, used sparingly */
+    --mono: "Cascadia Mono", ui-monospace, Consolas, monospace;
+    --sans: "Segoe UI", system-ui, sans-serif;
+  }
+  * { box-sizing: border-box; margin: 0; }
+  html, body { height: 100%; }
+  body {
+    background: linear-gradient(160deg, var(--cover), var(--cover-deep));
+    color: var(--paper);
+    font-family: var(--sans);
+    display: flex; flex-direction: column; align-items: center;
+    padding: 1.2rem 1rem 0.8rem;
+    gap: 0.9rem;
+  }
+
+  /* ---- progress: the running totals a bookkeeper keeps in the corner ---- */
+  header {
+    width: min(46rem, 100%);
+    display: flex; align-items: baseline; gap: 1.6rem; flex-wrap: wrap;
+  }
+  header h1 {
+    font-size: 0.82rem; font-weight: 600; letter-spacing: 0.24em;
+    text-transform: uppercase; color: var(--gilt);
+  }
+  .acct { flex: 1 1 10rem; min-width: 10rem; }
+  .acct .lbl {
+    display: flex; justify-content: space-between;
+    font-family: var(--mono); font-size: 0.72rem; color: #b9c2ae;
+  }
+  .bar {
+    height: 4px; margin-top: 4px;
+    background: #37453a; border-radius: 2px; overflow: hidden;
+  }
+  .bar i { display: block; height: 100%; background: var(--gilt); transition: width 0.4s; }
+  .counter { font-family: var(--mono); font-size: 0.72rem; color: #b9c2ae; }
+
+  /* ---- the ledger page ---- */
+  main { width: min(46rem, 100%); }
+  .page {
+    position: relative;
+    background:
+      repeating-linear-gradient(transparent 0 27px, var(--paper-line) 27px 28px),
+      var(--paper);
+    color: var(--ink);
+    border-radius: 2px;
+    box-shadow: 0 1px 0 #ffffff22 inset, 0 12px 30px #0007, 4px 0 0 -1px var(--gilt);
+    padding: 1.4rem 1.6rem 1.1rem 2.6rem;
+    min-height: 21rem;
+  }
+  .page::before {              /* the red margin rule */
+    content: ""; position: absolute; top: 0; bottom: 0; left: 1.7rem;
+    border-left: 1px solid var(--margin-rule);
+    border-right: 1px solid var(--margin-rule);
+    width: 3px;
+  }
+  .entry-meta {
+    display: flex; gap: 1.1rem; flex-wrap: wrap;
+    font-family: var(--mono); font-size: 0.74rem; color: var(--ink-faint);
+    margin-bottom: 0.4rem;
+  }
+  .amount { font-family: var(--mono); font-weight: 600; }
+  .amount.debit { color: var(--debit); }
+  .amount.credit { color: var(--credit); }
+  .norm {
+    font-family: var(--mono); font-size: 1.32rem; font-weight: 700;
+    line-height: 28px; letter-spacing: 0.02em; overflow-wrap: anywhere;
+  }
+  .samples { margin-top: 0.2rem; }
+  .samples div {
+    font-family: var(--mono); font-size: 0.78rem; color: var(--ink-faint);
+    line-height: 28px; white-space: pre-wrap; overflow-wrap: anywhere;
+  }
+  .suggest-line {
+    margin-top: 0.6rem; line-height: 28px;
+    font-size: 0.9rem; display: flex; gap: 0.6rem; align-items: baseline; flex-wrap: wrap;
+  }
+  .suggest-line .cat { font-weight: 700; }
+  .suggest-line .conf { font-family: var(--mono); font-size: 0.75rem; color: var(--ink-faint); }
+  .badge {
+    font-size: 0.66rem; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase;
+    padding: 0 0.4rem; border: 1px solid currentColor; border-radius: 2px;
+  }
+  .badge.llm { color: #5b5a8f; }
+  .badge.conflict { color: var(--debit); }
+  .conflict-cats { font-size: 0.85rem; }
+
+  .done-msg { line-height: 28px; font-size: 1rem; padding-top: 28px; }
+
+  /* ---- actions ---- */
+  footer {
+    width: min(46rem, 100%);
+    display: flex; gap: 0.9rem; flex-wrap: wrap; align-items: center;
+    color: #b9c2ae; font-size: 0.8rem;
+  }
+  kbd {
+    font-family: var(--mono); font-size: 0.74rem; color: var(--paper);
+    background: #ffffff14; border: 1px solid #ffffff2e; border-bottom-width: 2px;
+    border-radius: 3px; padding: 0.05rem 0.38rem; margin-right: 0.3rem;
+  }
+  footer button {
+    all: unset; cursor: pointer; display: inline-flex; align-items: center;
+    padding: 0.2rem 0.3rem; border-radius: 3px;
+  }
+  footer button:hover { background: #ffffff10; }
+  footer button:focus-visible { outline: 2px solid var(--gilt); }
+  .status { margin-left: auto; font-family: var(--mono); font-size: 0.74rem; min-height: 1em; }
+  .status.err { color: #e08a7a; }
+
+  /* ---- category picker ---- */
+  dialog {
+    border: none; border-radius: 4px; padding: 1.1rem 1.3rem;
+    background: var(--paper); color: var(--ink);
+    box-shadow: 0 18px 50px #000a; width: min(38rem, 92vw);
+  }
+  dialog::backdrop { background: #16211ac9; }
+  dialog h2 {
+    font-size: 0.75rem; letter-spacing: 0.2em; text-transform: uppercase;
+    color: var(--ink-faint); margin-bottom: 0.7rem;
+  }
+  .cats { display: grid; grid-template-columns: repeat(auto-fill, minmax(15rem, 1fr)); gap: 2px; }
+  .cats button {
+    all: unset; cursor: pointer; display: flex; gap: 0.55rem; align-items: baseline;
+    padding: 0.24rem 0.45rem; border-radius: 3px; font-size: 0.86rem;
+  }
+  .cats button:hover, .cats button:focus-visible { background: #d9decc; outline: none; }
+  .cats button.hot { background: #f3e9c8; }
+  .cats kbd { color: var(--ink); background: #d9decc; border-color: #b4bb9d; }
+  .pattern-row {
+    display: flex; gap: 0.6rem; margin-top: 0.9rem; align-items: center;
+    font-family: var(--mono); font-size: 0.8rem;
+  }
+  .pattern-row select, .pattern-row input {
+    font-family: var(--mono); font-size: 0.8rem; color: var(--ink);
+    background: #fff; border: 1px solid var(--paper-line); border-radius: 3px; padding: 0.3rem 0.4rem;
+  }
+  .pattern-row input { flex: 1; }
+  .pattern-row label { display: flex; align-items: center; gap: 0.35rem; font-family: var(--sans); font-size: 0.78rem; }
+
+</style>
+</head>
+<body>
+  <header>
+    <h1>Ledger</h1>
+    <div class="acct" id="acct-savings"></div>
+    <div class="acct" id="acct-credit"></div>
+    <div class="counter" id="counter"></div>
+  </header>
+
+  <main><div class="page" id="page"></div></main>
+
+  <footer id="legend">
+    <button data-act="accept"><kbd>a</kbd>accept → rule</button>
+    <button data-act="edit"><kbd>e</kbd>edit</button>
+    <button data-act="skip"><kbd>s</kbd>skip</button>
+    <button data-act="transfer"><kbd>t</kbd>internal</button>
+    <button data-act="oneoff"><kbd>x</kbd>one-off</button>
+    <button data-act="rejectsug"><kbd>r</kbd>reject sugg.</button>
+    <button data-act="undoskip"><kbd>u</kbd>unskip</button>
+    <span class="status" id="status"></span>
+  </footer>
+
+  <dialog id="picker">
+    <h2 id="picker-title">Choose category</h2>
+    <div class="cats" id="cats"></div>
+    <div class="pattern-row" id="pattern-row">
+      <select id="match">
+        <option>exact</option><option>prefix</option><option>substring</option><option>regex</option>
+      </select>
+      <input id="pattern" spellcheck="false">
+      <label><input type="checkbox" id="as-override">one-off</label>
+    </div>
+  </dialog>
+
+<script>
+"use strict";
+const $ = id => document.getElementById(id);
+const KEYS = "1234567890abcdefghijklmnop";
+let state = null, idx = 0, skipped = [], busy = false;
+
+const cents = c => {
+  const s = (Math.abs(c) / 100).toLocaleString("en-AU", {minimumFractionDigits: 2});
+  return (c < 0 ? "-$" : "$") + s;
+};
+
+function renderProgress(p) {
+  for (const a of p.accounts) {
+    const el = $("acct-" + a.id);
+    if (!el) continue;
+    const pct = a.vol ? Math.round(100 * a.vol_c / a.vol) : 0;
+    el.innerHTML = `<div class="lbl"><span>${a.id}</span><span>${pct}% of $</span></div>
+      <div class="bar"><i style="width:${pct}%"></i></div>`;
+  }
+}
+
+function current() { return state.queue[idx] ?? null; }
+
+function renderItem(animate = false) {
+  const page = $("page");
+  if (animate && !matchMedia("(prefers-reduced-motion: reduce)").matches)
+    page.animate(
+      [{opacity: 0.2, transform: "translateY(0.4rem)"}, {opacity: 1, transform: "none"}],
+      {duration: 140, easing: "ease-out"});
+  const it = current();
+  $("counter").textContent = state.queue.length
+    ? `${idx + 1} of ${state.queue.length}` : "";
+  if (!it) {
+    page.innerHTML = `<div class="done-msg">Queue clear — every remaining string is long-tail.
+      <br>Press <b>g</b> to refetch, or run <span style="font-family:var(--mono)">ledger suggest</span> for the next batch.</div>`;
+    return;
+  }
+  const sug = it.suggestion;
+  const sign = it.total < 0 ? "debit" : "credit";
+  page.innerHTML = `
+    <div class="entry-meta">
+      <span>${it.n} txn${it.n > 1 ? "s" : ""}</span>
+      <span class="amount ${sign}">${cents(it.total)}</span>
+      <span>${it.accounts}</span>
+      <span>${it.first.slice(0, 7)} → ${it.last.slice(0, 7)}</span>
+    </div>
+    <div class="norm">${esc(it.norm)}</div>
+    <div class="samples">${it.samples.map(s => `<div>${esc(s.replace(/\n/g, " "))}</div>`).join("")}</div>
+    ${sug ? `<div class="suggest-line">
+        <span class="badge llm">${esc(sug.model?.startsWith("claude") ? "llm" : sug.model || "llm")}</span>
+        <span class="cat">${esc(sug.budget_category)}</span>
+        <span class="conf">conf ${sug.confidence.toFixed(2)} · ${sug.suggested_match_type} “${esc(sug.suggested_pattern)}”</span>
+      </div>` : ""}
+    ${it.conflict ? `<div class="suggest-line">
+        <span class="badge conflict">legacy conflict</span>
+        <span class="conflict-cats">${it.conflict.map(esc).join(" vs ")}</span>
+      </div>` : ""}`;
+}
+
+const esc = s => s.replace(/[&<>"]/g, m => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[m]));
+
+async function fetchState() {
+  state = await (await fetch("/api/state")).json();
+  idx = 0; skipped = [];
+  renderProgress(state.progress);
+  renderItem();
+}
+
+function advance() {
+  state.queue.splice(idx, 1);
+  if (idx >= state.queue.length) idx = Math.max(0, state.queue.length - 1);
+  renderItem(true);
+}
+
+async function post(path, body) {
+  busy = true; setStatus("…");
+  try {
+    const res = await fetch(path, {method: "POST", body: JSON.stringify(body)});
+    const data = await res.json();
+    if (!res.ok) { setStatus(data.error, true); return null; }
+    if (data.progress) renderProgress(data.progress);
+    setStatus("");
+    return data;
+  } catch (e) { setStatus(String(e), true); return null; }
+  finally { busy = false; }
+}
+
+function setStatus(msg, err = false) {
+  const el = $("status");
+  el.textContent = msg;
+  el.className = "status" + (err ? " err" : "");
+}
+
+async function acceptWith(budget, match, pattern, asOverride = false) {
+  const it = current();
+  const path = asOverride ? "/api/override" : "/api/accept";
+  const ok = await post(path, {norm: it.norm, budget, match, pattern});
+  if (ok) advance();
+}
+
+const actions = {
+  accept() {
+    const it = current();
+    if (!it?.suggestion) { actions.edit(); return; }
+    const s = it.suggestion;
+    acceptWith(s.budget_category, s.suggested_match_type, s.suggested_pattern);
+  },
+  edit() { if (current()) openPicker(false); },
+  oneoff() { if (current()) openPicker(true); },
+  skip() { if (current()) { skipped.push(state.queue[idx]); advance(); } },
+  undoskip() {
+    if (skipped.length) { state.queue.splice(idx, 0, skipped.pop()); renderItem(); }
+  },
+  transfer() { if (current()) acceptWith("Internal", "exact", current().norm); },
+  async rejectsug() {
+    const it = current();
+    if (!it?.suggestion) return;
+    if (await post("/api/reject", {norm: it.norm})) { it.suggestion = null; renderItem(); }
+  },
+};
+
+/* ---- picker ---- */
+let pickerOverride = false;
+function openPicker(asOverride) {
+  const it = current();
+  pickerOverride = asOverride;
+  $("picker-title").textContent = asOverride
+    ? "One-off — override these txns, no rule" : "Choose category → rule";
+  $("as-override").checked = asOverride;
+  $("match").value = it.suggestion?.suggested_match_type ?? "exact";
+  $("pattern").value = it.suggestion?.suggested_pattern ?? it.norm;
+  const hot = new Set([...(it.conflict ?? []), it.suggestion?.budget_category].filter(Boolean));
+  $("cats").innerHTML = state.categories.map((c, i) =>
+    `<button data-cat="${esc(c)}" class="${hot.has(c) ? "hot" : ""}">
+       <kbd>${KEYS[i]}</kbd>${esc(c)}</button>`).join("");
+  for (const b of $("cats").querySelectorAll("button"))
+    b.onclick = () => pickCategory(b.dataset.cat);
+  $("picker").showModal();
+}
+
+function pickCategory(cat) {
+  $("picker").close();
+  acceptWith(cat, $("match").value, $("pattern").value, $("as-override").checked);
+}
+
+/* ---- keyboard ---- */
+const KEYMAP = {a: "accept", e: "edit", s: "skip", t: "transfer",
+                x: "oneoff", r: "rejectsug", u: "undoskip"};
+document.addEventListener("keydown", ev => {
+  if (busy || ev.ctrlKey || ev.metaKey || ev.altKey) return;
+  if ($("picker").open) {
+    if (ev.target.tagName === "INPUT" || ev.target.tagName === "SELECT") return;
+    const i = KEYS.indexOf(ev.key);
+    if (i >= 0 && i < state.categories.length) {
+      ev.preventDefault();
+      pickCategory(state.categories[i]);
+    }
+    return;
+  }
+  if (ev.target.tagName === "INPUT") return;
+  if (ev.key === "g") { fetchState(); return; }
+  const act = KEYMAP[ev.key];
+  if (act) { ev.preventDefault(); actions[act](); }
+});
+for (const b of document.querySelectorAll("footer button"))
+  b.onclick = () => actions[b.dataset.act]();
+
+fetchState();
+</script>
+</body>
+</html>

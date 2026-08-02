@@ -30,6 +30,10 @@ def main(argv: list[str] | None = None) -> None:
     g.add_argument("--tax", action="store_true")
     g.add_argument("--budget", action="store_true")
 
+    sp = sub.add_parser("review", help="launch the review UI")
+    sp.add_argument("--port", type=int, default=8765)
+    sp.add_argument("--no-browser", action="store_true")
+
     sp = sub.add_parser("suggest", help="LLM batch over unmatched strings")
     sp.add_argument("--limit", type=int, default=50)
     sp.add_argument("--emit", action="store_true", help="print batch input JSON")
@@ -60,6 +64,10 @@ def main(argv: list[str] | None = None) -> None:
             report.stats(con)
         case "report":
             report.report(con, args.fy, "tax" if args.tax else "budget")
+        case "review":
+            from ledger import server
+
+            server.serve(args.port, not args.no_browser)
         case "suggest":
             if args.load:
                 accepted, dropped = suggest.load_batch(con, args.load, args.model)
