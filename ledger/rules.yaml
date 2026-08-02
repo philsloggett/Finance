@@ -25,6 +25,13 @@ rules:
   tax: null
   source: llm_approved
   added: '2026-08-02T10:39:11+00:00'
+- id: electrafrostac-electrafr-hc8sytew
+  match: exact
+  pattern: ELECTRAFROSTAC ELECTRAFR_HC8SYTEW
+  budget: Accounting and Tax Fees
+  tax: null
+  source: manual
+  added: '2026-08-02T11:31:53+00:00'
 - id: pi-electra-frost
   match: prefix
   pattern: PI*ELECTRA FROST
@@ -286,6 +293,13 @@ rules:
   budget: Children and Pets
   tax: null
   source: imported_legacy
+- id: terrific-scientific-annandale
+  match: exact
+  pattern: TERRIFIC SCIENTIFIC ANNANDALE
+  budget: Children and Pets
+  tax: null
+  source: manual
+  added: '2026-08-02T11:38:13+00:00'
 - id: the-binocular-and-tele-glebe
   match: exact
   pattern: THE BINOCULAR AND TELE GLEBE
@@ -566,6 +580,13 @@ rules:
   tax: null
   source: manual
   added: '2026-08-02T11:09:03+00:00'
+- id: decathlon-australia-tempe
+  match: exact
+  pattern: DECATHLON (AUSTRALIA TEMPE
+  budget: Clothing and Personal Care
+  tax: null
+  source: manual
+  added: '2026-08-02T11:30:48+00:00'
 - id: denimbirkenheadpoint-drummoyne
   match: exact
   pattern: DENIMBIRKENHEADPOINT DRUMMOYNE
@@ -578,6 +599,13 @@ rules:
   budget: Clothing and Personal Care
   tax: null
   source: imported_legacy
+- id: deus-ex-machina-moto-camperdown
+  match: exact
+  pattern: DEUS EX MACHINA MOTO CAMPERDOWN
+  budget: Clothing and Personal Care
+  tax: null
+  source: manual
+  added: '2026-08-02T11:30:42+00:00'
 - id: divine-nails-haberfiel-haberfield
   match: exact
   pattern: DIVINE NAILS HABERFIEL HABERFIELD
@@ -686,6 +714,13 @@ rules:
   budget: Clothing and Personal Care
   tax: null
   source: imported_legacy
+- id: ipy-clearly-alexandria
+  match: exact
+  pattern: IPY*CLEARLY ALEXANDRIA
+  budget: Clothing and Personal Care
+  tax: null
+  source: manual
+  added: '2026-08-02T11:31:46+00:00'
 - id: jag-apparel-pty-ltd-alexandria
   match: exact
   pattern: JAG APPAREL PTY LTD ALEXANDRIA
@@ -801,6 +836,13 @@ rules:
   budget: Clothing and Personal Care
   tax: null
   source: imported_legacy
+- id: mecca-brands-pty-ltd-brisbane
+  match: exact
+  pattern: MECCA BRANDS PTY LTD BRISBANE
+  budget: Clothing and Personal Care
+  tax: null
+  source: manual
+  added: '2026-08-02T11:30:15+00:00'
 - id: mecca-maxima-burwood-burwood
   match: exact
   pattern: MECCA MAXIMA BURWOOD BURWOOD
@@ -1337,6 +1379,13 @@ rules:
   budget: Communication
   tax: null
   source: imported_legacy
+- id: apple-r523-broadway-ultimo
+  match: exact
+  pattern: APPLE R523 BROADWAY ULTIMO
+  budget: Communication
+  tax: null
+  source: manual
+  added: '2026-08-02T11:38:35+00:00'
 - id: aussie-broadband-li-au-morwell
   match: exact
   pattern: AUSSIE BROADBAND LI AU MORWELL
@@ -1920,6 +1969,20 @@ rules:
   budget: Communication
   tax: null
   source: imported_legacy
+- id: bhp-group-div-af384
+  match: exact
+  pattern: BHP GROUP DIV AF384
+  budget: Dividends
+  tax: null
+  source: manual
+  added: '2026-08-02T11:39:13+00:00'
+- id: bhp-group-div-af386
+  match: exact
+  pattern: BHP GROUP DIV AF386
+  budget: Dividends
+  tax: null
+  source: manual
+  added: '2026-08-02T11:40:51+00:00'
 - id: bhp-group-div-af388
   match: exact
   pattern: BHP GROUP DIV AF388
@@ -2813,6 +2876,13 @@ rules:
   budget: Fast Food
   tax: null
   source: imported_legacy
+- id: dominos-estore-five-do-dominos-com-a
+  match: exact
+  pattern: DOMINOS ESTORE FIVE DO DOMINOS.COM.A
+  budget: Fast Food
+  tax: null
+  source: manual
+  added: '2026-08-02T11:30:21+00:00'
 - id: doordash-cremeria-gius-melbourne
   match: exact
   pattern: DOORDASH*CREMERIA GIUS MELBOURNE
@@ -3511,6 +3581,13 @@ rules:
   budget: Fast Food
   tax: null
   source: imported_legacy
+- id: matraville-rsl-sub-matraville
+  match: exact
+  pattern: MATRAVILLE RSL SUB MATRAVILLE
+  budget: Fast Food
+  tax: null
+  source: manual
+  added: '2026-08-02T11:38:01+00:00'
 - id: mcdonalds-albion-park-albion-park-tap-an
   match: exact
   pattern: MCDONALDS ALBION PARK ALBION PARK TAP AN
@@ -4138,6 +4215,13 @@ rules:
   tax: null
   source: manual
   added: '2026-08-02T10:51:37+00:00'
+- id: rpa-jv-pty-ltd-camperdown
+  match: exact
+  pattern: RPA JV PTY LTD CAMPERDOWN
+  budget: Fast Food
+  tax: null
+  source: manual
+  added: '2026-08-02T11:30:02+00:00'
 - id: rutland-st-sandwiches-surry-hills
   match: exact
   pattern: RUTLAND ST SANDWICHES SURRY HILLS
@@ -4566,6 +4650,13 @@ rules:
   budget: Fast Food
   tax: null
   source: imported_legacy
+- id: vienna-works-pty-ltd-surry-hills-tap-and
+  match: exact
+  pattern: VIENNA WORKS PTY LTD SURRY HILLS TAP AND
+  budget: Fast Food
+  tax: null
+  source: manual
+  added: '2026-08-02T11:38:53+00:00'
 - id: watergrill-abbotsford-abbotsford
   match: exact
   pattern: WATERGRILL ABBOTSFORD ABBOTSFORD
@@ -4651,6 +4742,13 @@ rules:
   budget: Fast Food
   tax: null
   source: imported_legacy
+- id: zlr-leichhardt-bowlo-lilyfield
+  match: exact
+  pattern: ZLR*LEICHHARDT BOWLO LILYFIELD
+  budget: Fast Food
+  tax: null
+  source: manual
+  added: '2026-08-02T11:39:05+00:00'
 - id: zlr-organic-bread-bar-paddington
   match: exact
   pattern: ZLR*ORGANIC BREAD BAR PADDINGTON
@@ -5827,6 +5925,13 @@ rules:
   tax: null
   source: manual
   added: '2026-08-02T10:55:45+00:00'
+- id: transfer-to-other-bank-commbank-app-elis
+  match: exact
+  pattern: TRANSFER TO OTHER BANK COMMBANK APP ELIS
+  budget: Internal
+  tax: null
+  source: manual
+  added: '2026-08-02T11:29:39+00:00'
 - id: 99-bikes-bowen-hills
   match: exact
   pattern: 99 BIKES BOWEN HILLS
@@ -6984,6 +7089,13 @@ rules:
   budget: Other
   tax: null
   source: imported_legacy
+- id: sparq
+  match: exact
+  pattern: SPARQ
+  budget: Other
+  tax: null
+  source: manual
+  added: '2026-08-02T11:40:43+00:00'
 - id: the-flower-room-newtown
   match: exact
   pattern: THE FLOWER ROOM NEWTOWN
@@ -7256,6 +7368,13 @@ rules:
   budget: Recreation Travel and Entertainment
   tax: null
   source: imported_legacy
+- id: berkelouw-books-leichhardt
+  match: exact
+  pattern: BERKELOUW BOOKS LEICHHARDT
+  budget: Recreation Travel and Entertainment
+  tax: null
+  source: manual
+  added: '2026-08-02T11:39:50+00:00'
 - id: berkelouw-books-leichhardt-tap-and-pay
   match: exact
   pattern: BERKELOUW BOOKS LEICHHARDT TAP AND PAY
@@ -7317,6 +7436,13 @@ rules:
   budget: Recreation Travel and Entertainment
   tax: null
   source: imported_legacy
+- id: campingaccom
+  match: exact
+  pattern: CAMPINGACCOM
+  budget: Recreation Travel and Entertainment
+  tax: null
+  source: manual
+  added: '2026-08-02T11:30:59+00:00'
 - id: chin-chin-sydney-surry-hills
   match: exact
   pattern: CHIN CHIN SYDNEY SURRY HILLS

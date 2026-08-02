@@ -59,12 +59,14 @@ def import_file(
     account_id: str,
     legacy: bool = False,
     institution: str | None = None,
+    from_date: str | None = None,
 ) -> tuple[int, int]:
     """Import one CSV export. Returns (batch_id, rows). Re-import is a no-op.
 
     `institution` overrides the account's default column mapping — needed when
     one account has files in more than one export format (legacy sheet vs
-    live bank CSV).
+    live bank CSV). `from_date` (ISO) skips earlier rows — for exports that
+    overlap a period already covered by another source.
     """
     cfg = load_config()
     inst = ensure_account(con, account_id, cfg)
@@ -95,6 +97,8 @@ def import_file(
             if not raw and not date_s:
                 continue
             d = parse_date(date_s, inst["date_formats"])
+            if from_date and d.isoformat() < from_date:
+                continue
             if "amount_column" in inst:  # single signed column, debits negative
                 amount = to_cents(rec[inst["amount_column"]])
             else:

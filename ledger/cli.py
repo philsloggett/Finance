@@ -17,6 +17,8 @@ def main(argv: list[str] | None = None) -> None:
     sp.add_argument("--account", required=True)
     sp.add_argument("--legacy", action="store_true", help="also capture legacy categories")
     sp.add_argument("--institution", help="override the account's column mapping")
+    sp.add_argument("--from", dest="from_date", metavar="ISO_DATE",
+                    help="skip rows before this date (overlap with another source)")
 
     sub.add_parser("coverage", help="gap + balance-chain report")
     sub.add_parser("renormalise", help="recompute norm_description after a config bump")
@@ -47,7 +49,8 @@ def main(argv: list[str] | None = None) -> None:
     match args.cmd:
         case "import":
             batch_id, n = importer.import_file(
-                con, args.path, args.account, args.legacy, args.institution
+                con, args.path, args.account, args.legacy, args.institution,
+                args.from_date,
             )
             print(f"batch {batch_id}: {n} rows" if n else "already imported (no-op)")
         case "coverage":
