@@ -1,6 +1,10 @@
 # Claude Code local settings
 .claude/settings.local.json
 
+# Account data — never commit (spec §2)
+ledger/raw/
+ledger.db
+
 # OS cruft
 Thumbs.db
 Desktop.ini
