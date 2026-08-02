@@ -159,6 +159,7 @@ def rules_list(con: sqlite3.Connection) -> list[dict]:
             {"id": r["id"], "match": r["match"], "pattern": r["pattern"],
              "budget": r["budget"], "source": r.get("source", "manual"),
              "active": bool(r.get("active", True)), "added": r.get("added"),
+             "flag": r.get("flag"),
              "n": c["n"] if c else 0, "total": c["total"] if c else 0}
         )
     items.sort(key=lambda x: (x["added"] or "", x["n"]), reverse=True)
@@ -166,8 +167,10 @@ def rules_list(con: sqlite3.Connection) -> list[dict]:
 
 
 def update_rule(con: sqlite3.Connection, body: dict) -> dict:
-    rules.update_rule(body["id"], body.get("budget"), body.get("active"))
-    classify.reclassify(con)
+    kwargs = {"flag": body["flag"]} if "flag" in body else {}
+    rules.update_rule(body["id"], body.get("budget"), body.get("active"), **kwargs)
+    if body.get("budget") is not None or body.get("active") is not None:
+        classify.reclassify(con)  # flag-only edits don't affect classification
     return {}
 
 
@@ -362,7 +365,13 @@ class Handler(BaseHTTPRequestHandler):
             },
             "/api/rules": lambda con: {"rules": rules_list(con)},
             "/api/unusual": lambda con: {
-                "unusual": unusual(con), "followups": followups(con)
+                "unusual": unusual(con),
+                "followups": followups(con),
+                "rule_followups": [
+                    {"id": r["id"], "pattern": r["pattern"], "match": r["match"],
+                     "budget": r["budget"], "flag": r["flag"]}
+                    for r in rules.load_rules() if r.get("flag")
+                ],
             },
             "/api/charts": charts,
             "/api/occurrences": lambda con: {"occurrences": occurrences(con, q["norm"])},

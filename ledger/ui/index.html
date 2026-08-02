@@ -577,17 +577,30 @@ function renderDecisions() {
   $("dec-list").innerHTML = shown.map(r => `
     <div class="row ${r.active ? "" : "inactive"}">
       <span class="cat">${r.source === "imported_legacy" ? "legacy" : r.source === "llm_approved" ? "llm✓" : "manual"}</span>
-      <span class="desc">${r.match === "exact" ? "" : r.match + " "}${esc(r.pattern)}</span>
+      <span class="desc">${r.match === "exact" ? "" : r.match + " "}${esc(r.pattern)}
+        ${r.flag ? `<span class="why">⚑ ${esc(r.flag)}</span>` : ""}</span>
       <span class="cat"><b>${esc(r.budget)}</b></span>
       <span class="amt amount ${r.total < 0 ? "debit" : "credit"}">${cents(r.total)}</span>
       <span class="cat">${r.n} txns</span>
       <button data-id="${r.id}" data-act="recat" data-cat="${esc(r.budget)}">change</button>
       <button data-id="${r.id}" data-act="toggle">${r.active ? "disable" : "enable"}</button>
+      <button data-id="${r.id}" data-act="flag">${r.flag ? "unflag" : "flag"}</button>
     </div>`).join("");
   for (const b of $("dec-list").querySelectorAll("button")) {
     if (b.dataset.act === "recat")
       b.onclick = () => openPickerFor({type: "rule", id: b.dataset.id},
         "Change this rule's category", b.dataset.cat);
+    else if (b.dataset.act === "flag")
+      b.onclick = async () => {
+        const r = decRules.find(x => x.id === b.dataset.id);
+        let note = "";
+        if (!r.flag) {
+          note = prompt("Follow-up note (optional):");
+          if (note === null) return;
+        }
+        if (await post("/api/rules/update", {id: r.id, flag: r.flag ? "" : (note || "review")}))
+          loadDecisions();
+      };
     else
       b.onclick = async () => {
         const r = decRules.find(x => x.id === b.dataset.id);
@@ -798,8 +811,18 @@ async function flagTxn(txnId) {
 
 async function loadUnusual() {
   const res = await (await fetch("/api/unusual")).json();
-  $("followups-wrap").style.display = res.followups.length ? "" : "none";
-  $("follow-list").innerHTML = res.followups.map(t => `
+  $("followups-wrap").style.display =
+    res.followups.length || res.rule_followups.length ? "" : "none";
+  const ruleRows = res.rule_followups.map(r => `
+    <div class="row">
+      <span class="cat">rule</span>
+      <span class="desc">${r.match === "exact" ? "" : r.match + " "}${esc(r.pattern)}
+        <span class="why">⚑ ${esc(r.flag)}</span></span>
+      <span class="cat"><b>${esc(r.budget)}</b></span>
+      <button data-act="dec" data-pattern="${esc(r.pattern)}">decisions</button>
+      <button data-act="unflag-rule" data-id="${r.id}">resolve</button>
+    </div>`).join("");
+  $("follow-list").innerHTML = ruleRows + res.followups.map(t => `
     <div class="row">
       <span class="date">${t.date}</span><span class="acct">${t.account_id}</span>
       <span class="amt amount ${t.amount < 0 ? "debit" : "credit"}">${cents(t.amount)}</span>
@@ -824,6 +847,16 @@ async function loadUnusual() {
       b.onclick = () => { $("unu").close(); openContextAt(b.dataset.date, b.dataset.txn); };
     else if (b.dataset.act === "resolve")
       b.onclick = async () => { await post("/api/flag_resolve", {txn_id: b.dataset.txn}); loadUnusual(); };
+    else if (b.dataset.act === "dec")
+      b.onclick = () => {
+        $("unu").close(); loadDecisions().then(() => {
+          $("dec-filter").value = b.dataset.pattern; renderDecisions(); $("dec").showModal();
+        });
+      };
+    else if (b.dataset.act === "unflag-rule")
+      b.onclick = async () => {
+        if (await post("/api/rules/update", {id: b.dataset.id, flag: ""})) loadUnusual();
+      };
     else
       b.onclick = async () => { if (await flagTxn(b.dataset.txn)) loadUnusual(); };
   }

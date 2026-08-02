@@ -80,7 +80,15 @@ def remove_rule(rule_id: str) -> None:
     save_rules([r for r in load_rules() if r["id"] != rule_id])
 
 
-def update_rule(rule_id: str, budget: str | None = None, active: bool | None = None) -> None:
+_UNSET = object()
+
+
+def update_rule(
+    rule_id: str,
+    budget: str | None = None,
+    active: bool | None = None,
+    flag: object = _UNSET,
+) -> None:
     all_rules = load_rules()
     for r in all_rules:
         if r["id"] == rule_id:
@@ -88,6 +96,11 @@ def update_rule(rule_id: str, budget: str | None = None, active: bool | None = N
                 r["budget"] = budget
             if active is not None:
                 r["active"] = active
+            if flag is not _UNSET:  # truthy sets a follow-up note, falsy clears it
+                if flag:
+                    r["flag"] = flag
+                else:
+                    r.pop("flag", None)
             save_rules(all_rules)
             return
     raise ValueError(f"no rule {rule_id!r}")

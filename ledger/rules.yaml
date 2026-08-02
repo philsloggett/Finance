@@ -7479,6 +7479,13 @@ rules:
   budget: Other
   tax: null
   source: imported_legacy
+- id: transfer-to-g-mendoza-commbank-app-116-w
+  match: exact
+  pattern: TRANSFER TO G MENDOZA COMMBANK APP 116 W
+  budget: Other
+  tax: null
+  source: manual
+  added: '2026-08-02T12:12:31+00:00'
 - id: transfer-to-other-bank-netbank-seymour
   match: exact
   pattern: TRANSFER TO OTHER BANK NETBANK SEYMOUR
@@ -7486,6 +7493,13 @@ rules:
   tax: null
   source: llm_approved
   added: '2026-08-02T10:45:35+00:00'
+- id: transfer-to-safs-commbank-app-25-elise
+  match: exact
+  pattern: TRANSFER TO SAFS COMMBANK APP 25/ ELISE
+  budget: Other
+  tax: null
+  source: llm_approved
+  added: '2026-08-02T12:11:37+00:00'
 - id: unpaid-payment-fee-value-date
   match: exact
   pattern: 'UNPAID PAYMENT FEE VALUE DATE:'
