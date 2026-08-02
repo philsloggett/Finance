@@ -41,7 +41,8 @@ def main(argv: list[str] | None = None) -> None:
     sp.add_argument("--limit", type=int, default=50)
     sp.add_argument("--emit", action="store_true", help="print batch input JSON")
     sp.add_argument("--load", type=Path, help="validate + store LLM output JSON")
-    sp.add_argument("--model", default="unknown")
+    sp.add_argument("--run", action="store_true", help="run the pass via the claude CLI")
+    sp.add_argument("--model", default=None)
 
     args = p.parse_args(argv)
     con = db.connect()
@@ -76,8 +77,10 @@ def main(argv: list[str] | None = None) -> None:
             server.serve(args.port, not args.no_browser)
         case "suggest":
             if args.load:
-                accepted, dropped = suggest.load_batch(con, args.load, args.model)
+                accepted, dropped = suggest.load_batch(con, args.load, args.model or "unknown")
                 print(f"accepted {accepted}, dropped {dropped}")
+            elif args.run:
+                print(suggest.run_llm(con, args.limit, model=args.model))
             else:
                 json.dump(suggest.emit_batch(con, args.limit), sys.stdout, indent=1)
 

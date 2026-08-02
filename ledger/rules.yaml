@@ -1456,6 +1456,13 @@ rules:
   tax: null
   source: manual
   added: '2026-08-02T11:38:35+00:00'
+- id: aussie-broadband
+  match: prefix
+  pattern: AUSSIE BROADBAND
+  budget: Communication
+  tax: null
+  source: llm_approved
+  added: '2026-08-02T12:31:20+00:00'
 - id: aussie-broadband-li-au-morwell
   match: exact
   pattern: AUSSIE BROADBAND LI AU MORWELL
@@ -1596,6 +1603,13 @@ rules:
   budget: Communication
   tax: null
   source: imported_legacy
+- id: jb-hi-fi-broadway
+  match: exact
+  pattern: JB HI FI BROADWAY
+  budget: Communication
+  tax: null
+  source: manual
+  added: '2026-08-02T12:30:18+00:00'
 - id: jb-hi-fi-broadway-broadway
   match: exact
   pattern: JB HI FI BROADWAY BROADWAY
@@ -2823,6 +2837,13 @@ rules:
   budget: Fast Food
   tax: null
   source: llm_approved
+- id: crust-annandale-robina
+  match: exact
+  pattern: CRUST - ANNANDALE ROBINA
+  budget: Fast Food
+  tax: null
+  source: manual
+  added: '2026-08-02T12:31:40+00:00'
 - id: crust-drummoyne-drummoyne
   match: exact
   pattern: CRUST DRUMMOYNE DRUMMOYNE
@@ -4385,6 +4406,13 @@ rules:
   budget: Fast Food
   tax: null
   source: imported_legacy
+- id: rg-pit-pty-ltd-haymarket
+  match: exact
+  pattern: RG PIT PTY LTD HAYMARKET
+  budget: Fast Food
+  tax: null
+  source: manual
+  added: '2026-08-02T12:29:23+00:00'
 - id: rosie-oats-burrill-lake
   match: exact
   pattern: ROSIE OATS BURRILL LAKE
@@ -5781,6 +5809,13 @@ rules:
   budget: Food and Groceries
   tax: null
   source: imported_legacy
+- id: sp-koh-com-sydney
+  match: exact
+  pattern: SP KOH.COM SYDNEY
+  budget: Food and Groceries
+  tax: null
+  source: manual
+  added: '2026-08-02T12:30:35+00:00'
 - id: sp-milkrun-au-surry-hills
   match: exact
   pattern: SP MILKRUN-AU SURRY HILLS
@@ -5847,6 +5882,13 @@ rules:
   budget: Food and Groceries
   tax: null
   source: imported_legacy
+- id: the-centre-dural-dural
+  match: exact
+  pattern: THE CENTRE DURAL DURAL
+  budget: Food and Groceries
+  tax: null
+  source: manual
+  added: '2026-08-02T12:31:30+00:00'
 - id: the-dietologist-chippendale
   match: exact
   pattern: THE DIETOLOGIST CHIPPENDALE
@@ -6374,6 +6416,13 @@ rules:
   budget: Medical, Health and Fitness
   tax: null
   source: imported_legacy
+- id: chemist-warehouse-balmain
+  match: exact
+  pattern: CHEMIST WAREHOUSE BALMAIN
+  budget: Medical, Health and Fitness
+  tax: null
+  source: manual
+  added: '2026-08-02T12:30:45+00:00'
 - id: chemist-warehouse-birk-drummoyne
   match: exact
   pattern: CHEMIST WAREHOUSE BIRK DRUMMOYNE
