@@ -12,3 +12,7 @@ Desktop.ini
 # Office temp files
 ~$*
 *.tmp
+
+# Python
+__pycache__/
+*.pyc
