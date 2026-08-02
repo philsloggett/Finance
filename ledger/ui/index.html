@@ -252,6 +252,7 @@ const cents = c => {
 };
 
 function renderProgress(p) {
+  if (state) { state.progress = p; renderCounter(); }
   for (const a of p.accounts) {
     const el = $("acct-" + a.id);
     if (!el) continue;
@@ -265,6 +266,16 @@ function renderProgress(p) {
 
 function current() { return state.queue[idx] ?? null; }
 
+function renderCounter() {
+  const total = state.progress?.remaining_strings ?? state.queue.length;
+  const rows = state.progress?.remaining_rows ?? 0;
+  const el = $("counter");
+  el.textContent = total ? `${total.toLocaleString()} strings to go` : "";
+  el.title = `${total.toLocaleString()} distinct merchant strings still unclassified `
+    + `(${rows.toLocaleString()} transactions). The list holds the top `
+    + `${state.queue.length} by $ leverage — most of the rest are one-off small amounts.`;
+}
+
 function renderItem(animate = false) {
   const page = $("page");
   if (animate && !matchMedia("(prefers-reduced-motion: reduce)").matches)
@@ -272,8 +283,7 @@ function renderItem(animate = false) {
       [{opacity: 0.2, transform: "translateY(0.4rem)"}, {opacity: 1, transform: "none"}],
       {duration: 140, easing: "ease-out"});
   const it = current();
-  $("counter").textContent = state.queue.length
-    ? `${idx + 1} of ${state.queue.length}` : "";
+  renderCounter();
   if (!it) {
     page.innerHTML = `<div class="done-msg">Queue clear — every remaining string is long-tail.
       <br>Press <b>g</b> to refetch, or run <span style="font-family:var(--mono)">ledger suggest</span> for the next batch.</div>`;

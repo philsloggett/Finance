@@ -28,7 +28,16 @@ def progress(con: sqlite3.Connection) -> dict:
             {"id": acct["account_id"], "rows": row["n"], "rows_c": row["cn"],
              "vol": row["vol"], "vol_c": row["cvol"]}
         )
-    return {"accounts": accounts}
+    remaining = con.execute(
+        f"""SELECT COUNT(DISTINCT t.norm_description) AS strings, COUNT(*) AS rows
+            FROM transactions t JOIN classifications c USING (txn_id)
+            WHERE c.source = 'unclassified' AND {report.NOT_TRANSFER}"""
+    ).fetchone()
+    return {
+        "accounts": accounts,
+        "remaining_strings": remaining["strings"],
+        "remaining_rows": remaining["rows"],
+    }
 
 
 def queue_items(con: sqlite3.Connection, limit: int = 200) -> list[dict]:
