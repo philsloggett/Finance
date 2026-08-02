@@ -1,0 +1,23 @@
+# Accounts and per-institution CSV column mappings (spec 4.1).
+accounts:
+  savings:
+    name: CommBank transaction account
+    kind: transaction
+    institution: legacy_sheet
+  credit:
+    name: CommBank credit card
+    kind: credit_card
+    institution: legacy_sheet
+
+institutions:
+  # Exports of the "Bank Statements Catchup" Google Sheet tabs.
+  # Debit and Credit are separate positive columns; ValueChange is formula
+  # junk and ignored. The Category column feeds legacy_labels on --legacy.
+  legacy_sheet:
+    date_column: Date
+    date_formats: ["%Y-%m-%d %H:%M:%S", "%Y-%m-%d"]
+    description_column: Text
+    debit_column: Debit
+    credit_column: Credit
+    balance_column: null
+    category_column: Category

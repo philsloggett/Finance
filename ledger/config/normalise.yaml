@@ -1,0 +1,24 @@
+# Normalisation transforms (spec 5). Bump `version` on any change, then run
+# `ledger renormalise`.
+version: 1
+
+# Stripped repeatedly from the start of the description (after uppercasing).
+strip_prefixes:
+  - "SQ *"
+  - "SP *"
+  - "PAYPAL *"
+  - "SMP*"
+  - EFTPOS
+  - VISA PURCHASE
+  - DIRECT DEBIT
+  - DIRECT CREDIT
+  - OSKO PAYMENT
+  - OSKO WITHDRAWAL
+  - OSKO DEPOSIT
+  - PAYID
+
+# Trailing state/country tokens stripped repeatedly from the end.
+strip_states: [NSW, VIC, QLD, WA, SA, TAS, ACT, NT]
+strip_countries: [AUS, AU, GBR, USA, US]
+
+truncate: 40

@@ -1,0 +1,32 @@
+# Both taxonomies (spec 1.7). Budget seeded from the legacy sheet's
+# Categories tab. "Internal" marks account-to-account movements; proper
+# transfer exclusion is transfer_links (spec 6), but the legacy labels are
+# kept as-is.
+budget:
+  - Food and Groceries
+  - Fast Food
+  - Utility and Maintenance
+  - Communication
+  - Public Education
+  - Clothing and Personal Care
+  - Transport and Auto
+  - Medical, Health and Fitness
+  - Insurance
+  - Recreation Travel and Entertainment
+  - Children and Pets
+  - Other
+  - Internal
+  - Salary
+  - Interest
+  - Rent
+  - Dividends
+  - Sale
+  - Home Loan Repayments
+  - Mum inheritance
+  - Shares Sales
+  - Strata
+  - Fines and infringements
+  - ATO payment
+
+# Ask the accountant which buckets they want before filling this in (spec 12).
+tax: []
