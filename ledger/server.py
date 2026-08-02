@@ -236,6 +236,39 @@ def unusual(con: sqlite3.Connection) -> list[dict]:
     return sorted(flags.values(), key=lambda x: -abs(x["amount"]))[:100]
 
 
+def charts(con: sqlite3.Connection) -> dict:
+    """Monthly spend/income per category for the charts view.
+
+    Excludes transfer-linked txns, Internal, and single txns >= $100k (data
+    errors and property settlements would destroy the scale); the excluded
+    list ships alongside so the UI can disclose them.
+    """
+    rows = [
+        dict(r)
+        for r in con.execute(
+            f"""SELECT strftime('%Y-%m', t.date) AS month,
+                COALESCE(c.budget_category, '(unclassified)') AS cat,
+                SUM(CASE WHEN t.amount < 0 THEN -t.amount ELSE 0 END) AS spend,
+                SUM(CASE WHEN t.amount > 0 THEN t.amount ELSE 0 END) AS income
+                FROM transactions t JOIN classifications c USING (txn_id)
+                WHERE {report.NOT_TRANSFER}
+                  AND COALESCE(c.budget_category, '') != 'Internal'
+                  AND ABS(t.amount) < 100000_00
+                GROUP BY month, cat ORDER BY month"""
+        )
+    ]
+    excluded = [
+        dict(r)
+        for r in con.execute(
+            f"""SELECT t.date, t.amount, t.raw_description FROM transactions t
+                JOIN classifications c USING (txn_id)
+                WHERE {report.NOT_TRANSFER} AND ABS(t.amount) >= 100000_00
+                ORDER BY t.date"""
+        )
+    ]
+    return {"rows": rows, "excluded": excluded}
+
+
 def reject(con: sqlite3.Connection, body: dict) -> dict:
     con.execute(
         "UPDATE suggestions SET status = 'rejected' WHERE norm_description = ?",
@@ -276,6 +309,7 @@ class Handler(BaseHTTPRequestHandler):
             },
             "/api/rules": lambda con: {"rules": rules_list(con)},
             "/api/unusual": lambda con: {"unusual": unusual(con)},
+            "/api/charts": charts,
             "/api/occurrences": lambda con: {"occurrences": occurrences(con, q["norm"])},
             "/api/context": lambda con: {
                 "context": context(con, q["date"], int(q.get("days", 7)))

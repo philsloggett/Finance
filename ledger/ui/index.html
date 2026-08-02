@@ -158,6 +158,58 @@
     box-shadow: 0 18px 50px #000a; width: min(38rem, 92vw);
   }
   #ctx, #dec, #unu { width: min(52rem, 95vw); }
+  #viz { width: min(64rem, 96vw); max-height: 94vh; overflow-y: auto; }
+
+  /* ---- charts ---- */
+  .viz-root {
+    color-scheme: light;
+    --surface-1: #fcfcfb; --text-primary: #0b0b0b; --text-secondary: #52514e;
+    --muted: #898781; --grid: #e1e0d9; --baseline: #c3c2b7;
+    margin-top: 0.6rem; display: flex; flex-direction: column; gap: 0.8rem;
+  }
+  .viz-controls { display: flex; gap: 0.7rem; align-items: center; flex-wrap: wrap; }
+  .seg { display: flex; border: 1px solid var(--paper-line); border-radius: 4px; overflow: hidden; }
+  .seg button { all: unset; cursor: pointer; padding: 0.26rem 0.75rem; font-size: 0.78rem; }
+  .seg button.on { background: var(--ink); color: var(--paper); }
+  .seg button:focus-visible { outline: 2px solid var(--gilt); outline-offset: -2px; }
+  .viz-note { font-size: 0.72rem; color: var(--ink-faint); }
+  .viz-grid { display: grid; grid-template-columns: 16rem 1fr; gap: 1rem; align-items: stretch; }
+  @media (max-width: 46rem) { .viz-grid { grid-template-columns: 1fr; } }
+  .viz-card {
+    background: var(--surface-1); border: 1px solid rgba(11,11,11,0.10);
+    border-radius: 6px; padding: 0.9rem; position: relative;
+  }
+  .viz-card h3 {
+    font-size: 0.7rem; font-weight: 600; letter-spacing: 0.14em; text-transform: uppercase;
+    color: var(--muted); margin-bottom: 0.6rem;
+  }
+  .bar-rows { display: flex; flex-direction: column; gap: 3px; max-height: 15.5rem; overflow-y: auto; }
+  .bar-row { display: grid; grid-template-columns: 11.5rem 1fr 8.5rem; gap: 0.6rem; align-items: center; }
+  .bar-row .nm { font-size: 0.74rem; color: var(--text-primary); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .bar-row .track { height: 12px; }
+  .bar-row .track i { display: block; height: 100%; border-radius: 0 4px 4px 0; min-width: 2px; }
+  .bar-row .val {
+    font-family: var(--mono); font-size: 0.7rem; color: var(--text-secondary);
+    text-align: right; font-variant-numeric: tabular-nums; white-space: nowrap;
+  }
+  .chips { display: flex; gap: 0.4rem; flex-wrap: wrap; margin-bottom: 0.5rem; }
+  .chip {
+    all: unset; cursor: pointer; display: inline-flex; gap: 0.35rem; align-items: center;
+    font-size: 0.72rem; color: var(--text-secondary);
+    border: 1px solid var(--grid); border-radius: 999px; padding: 0.12rem 0.55rem;
+  }
+  .chip i { width: 9px; height: 9px; border-radius: 50%; }
+  .chip.off { opacity: 0.35; }
+  .chip:focus-visible { outline: 2px solid var(--gilt); }
+  .viz-tip {
+    position: absolute; pointer-events: none; display: none; z-index: 2;
+    background: #fff; border: 1px solid rgba(11,11,11,0.10); border-radius: 4px;
+    box-shadow: 0 4px 14px #0003; padding: 0.4rem 0.55rem; font-size: 0.72rem;
+    color: var(--text-primary); min-width: 10rem;
+  }
+  .viz-tip .tr { display: flex; gap: 0.5rem; align-items: center; justify-content: space-between; }
+  .viz-tip .tr i { width: 8px; height: 8px; border-radius: 50%; flex: none; }
+  .viz-tip .tr span:last-child { font-family: var(--mono); font-variant-numeric: tabular-nums; }
   dialog::backdrop { background: #16211ac9; }
   dialog h2 {
     font-size: 0.75rem; letter-spacing: 0.2em; text-transform: uppercase;
@@ -205,6 +257,7 @@
     <button data-act="context"><kbd>c</kbd>context</button>
     <button data-act="decisions"><kbd>d</kbd>decisions</button>
     <button data-act="unusual"><kbd>f</kbd>flagged</button>
+    <button data-act="charts"><kbd>v</kbd>charts</button>
     <span class="status" id="status"></span>
   </footer>
 
@@ -226,6 +279,30 @@
   <dialog id="unu">
     <h2>Flagged — unusual payments</h2>
     <div class="panel-list" id="unu-list"></div>
+  </dialog>
+
+  <dialog id="viz">
+    <h2>Charts — where the money goes</h2>
+    <div class="viz-root">
+      <div class="viz-controls">
+        <div class="seg" id="viz-mode">
+          <button data-m="spend" class="on">Spending</button>
+          <button data-m="income">Income</button>
+        </div>
+        <select id="viz-fy"></select>
+        <span class="viz-note" id="viz-note"></span>
+      </div>
+      <div class="viz-grid">
+        <div class="viz-card"><h3 id="donut-title"></h3><div id="donut"></div></div>
+        <div class="viz-card"><h3>By category</h3><div class="bar-rows" id="viz-bars"></div></div>
+      </div>
+      <div class="viz-card">
+        <h3 id="trend-title"></h3>
+        <div class="chips" id="viz-chips"></div>
+        <div id="trend"></div>
+        <div class="viz-tip" id="viz-tip"></div>
+      </div>
+    </div>
   </dialog>
 
   <dialog id="picker">
@@ -374,6 +451,7 @@ const actions = {
   context() { if (current()) openContext(current()); },
   decisions() { loadDecisions(); $("dec").showModal(); },
   unusual() { loadUnusual(); $("unu").showModal(); },
+  charts() { openCharts(); },
 };
 
 /* ---- picker (shared by review item, rule edit, txn override) ---- */
@@ -491,6 +569,199 @@ function renderDecisions() {
   }
 }
 
+/* ---- charts ---- */
+const VIZ = {
+  slots: ["#2a78d6", "#eb6834", "#1baf7a", "#eda100", "#e87ba4", "#008300", "#4a3aa7"],
+  other: "#898781", unclass: "#b5b3ac",
+  data: null, mode: "spend", fy: "all",
+  colorMap: {}, topCats: {}, hidden: new Set(), inited: false,
+};
+const fmt$ = v => v >= 9.95e7 ? "$" + (v / 1e8).toFixed(1) + "M"
+  : v >= 9.95e4 ? "$" + Math.round(v / 1e5) + "k" : "$" + (v / 100).toFixed(0);
+const fyOfMonth = m => {
+  const [y, mo] = m.split("-").map(Number);
+  const s = mo >= 7 ? y : y - 1;
+  return `${s}-${String(s + 1).slice(2)}`;
+};
+
+async function openCharts() {
+  if (!VIZ.data) {
+    VIZ.data = (await (await fetch("/api/charts")).json());
+    const fys = [...new Set(VIZ.data.rows.map(r => fyOfMonth(r.month)))].sort();
+    $("viz-fy").innerHTML = `<option value="all">All time</option>`
+      + fys.map(f => `<option value="${f}">FY ${f}</option>`).join("");
+    for (const mode of ["spend", "income"]) {
+      const tot = {};
+      for (const r of VIZ.data.rows) tot[r.cat] = (tot[r.cat] ?? 0) + r[mode];
+      const ranked = Object.entries(tot).filter(([c, v]) => v > 0 && c !== "(unclassified)")
+        .sort((a, b) => b[1] - a[1]).map(([c]) => c);
+      VIZ.topCats[mode] = ranked.slice(0, 7);
+      VIZ.colorMap[mode] = new Map(ranked.slice(0, 7).map((c, i) => [c, VIZ.slots[i]]));
+    }
+    $("viz-fy").onchange = () => { VIZ.fy = $("viz-fy").value; renderViz(); };
+    for (const b of $("viz-mode").querySelectorAll("button"))
+      b.onclick = () => {
+        VIZ.mode = b.dataset.m; VIZ.hidden = new Set(); VIZ.inited = false;
+        for (const x of $("viz-mode").querySelectorAll("button"))
+          x.classList.toggle("on", x === b);
+        renderViz();
+      };
+    const exN = VIZ.data.excluded.length;
+    const exSum = VIZ.data.excluded.reduce((a, t) => a + Math.abs(t.amount), 0);
+    $("viz-note").textContent = exN
+      ? `Excludes ${exN} txns ≥ $100k (${fmt$(exSum)} — press f to inspect) and transfers.`
+      : "Transfers excluded.";
+  }
+  renderViz();
+  $("viz").showModal();
+}
+
+function vizColor(cat) {
+  return cat === "(unclassified)" ? VIZ.unclass
+    : VIZ.colorMap[VIZ.mode].get(cat) ?? VIZ.other;
+}
+
+function vizAgg() {
+  const rows = VIZ.data.rows.filter(r => VIZ.fy === "all" || fyOfMonth(r.month) === VIZ.fy);
+  const tot = {};
+  for (const r of rows) tot[r.cat] = (tot[r.cat] ?? 0) + r[VIZ.mode];
+  return Object.entries(tot).filter(([, v]) => v > 0).sort((a, b) => b[1] - a[1]);
+}
+
+function renderViz() {
+  const agg = vizAgg();
+  const label = VIZ.mode === "spend" ? "Spending" : "Income";
+  const period = VIZ.fy === "all" ? "all time" : "FY " + VIZ.fy;
+  renderDonut(agg, label, period);
+  renderVizBars(agg);
+  renderTrend(label, period);
+}
+
+function arcPath(cx, cy, r0, r1, a0, a1) {
+  a1 = Math.min(a1, a0 + Math.PI * 2 - 1e-4);
+  const p = (r, a) => `${(cx + r * Math.sin(a)).toFixed(2)} ${(cy - r * Math.cos(a)).toFixed(2)}`;
+  const big = a1 - a0 > Math.PI ? 1 : 0;
+  return `M${p(r1, a0)} A${r1} ${r1} 0 ${big} 1 ${p(r1, a1)} `
+    + `L${p(r0, a1)} A${r0} ${r0} 0 ${big} 0 ${p(r0, a0)} Z`;
+}
+
+function renderDonut(agg, label, period) {
+  $("donut-title").textContent = `${label} · ${period}`;
+  const total = agg.reduce((a, [, v]) => a + v, 0);
+  if (!total) { $("donut").innerHTML = `<div class="viz-note">No ${label.toLowerCase()} in ${period}.</div>`; return; }
+  const top = agg.filter(([c]) => VIZ.colorMap[VIZ.mode].has(c));
+  const rest = total - top.reduce((a, [, v]) => a + v, 0);
+  const slices = [...top.map(([c, v]) => [c, v, vizColor(c)])];
+  if (rest > 0) slices.push(["Other", rest, VIZ.other]);
+  let a = 0;
+  const paths = slices.map(([c, v, col]) => {
+    const a1 = a + (v / total) * Math.PI * 2;
+    const d = arcPath(110, 110, 62, 100, a, a1);
+    a = a1;
+    return `<path d="${d}" fill="${col}" stroke="var(--surface-1)" stroke-width="2">
+      <title>${esc(c)}: ${fmt$(v)} (${(100 * v / total).toFixed(0)}%)</title></path>`;
+  }).join("");
+  $("donut").innerHTML = `<svg viewBox="0 0 220 220" role="img" aria-label="${label} by category, ${period}">
+    ${paths}
+    <text x="110" y="105" text-anchor="middle" font-size="22" font-weight="600" fill="var(--text-primary)">${fmt$(total)}</text>
+    <text x="110" y="124" text-anchor="middle" font-size="10" fill="var(--muted)">${label.toLowerCase()} · ${period}</text>
+  </svg>`;
+}
+
+function renderVizBars(agg) {
+  const total = agg.reduce((a, [, v]) => a + v, 0);
+  const max = agg[0]?.[1] ?? 1;
+  $("viz-bars").innerHTML = agg.map(([c, v]) => `
+    <div class="bar-row">
+      <span class="nm">${esc(c)}</span>
+      <span class="track"><i style="width:${(100 * v / max).toFixed(1)}%;background:${vizColor(c)}"></i></span>
+      <span class="val">${fmt$(v)} · ${(100 * v / total).toFixed(1)}%</span>
+    </div>`).join("");
+}
+
+function trendSeries() {
+  const rows = VIZ.data.rows.filter(r => VIZ.fy === "all" || fyOfMonth(r.month) === VIZ.fy);
+  const months = [...new Set(rows.map(r => r.month))].sort();
+  const cats = [...VIZ.topCats[VIZ.mode], "Other"];
+  const series = new Map(cats.map(c => [c, new Array(months.length).fill(0)]));
+  const mi = new Map(months.map((m, i) => [m, i]));
+  for (const r of rows) {
+    const key = VIZ.colorMap[VIZ.mode].has(r.cat) ? r.cat : "Other";
+    series.get(key)[mi.get(r.month)] += r[VIZ.mode];
+  }
+  return {months, series};
+}
+
+function renderTrend(label, period) {
+  $("trend-title").textContent = `${label} per month · ${period}`;
+  const {months, series} = trendSeries();
+  if (!VIZ.inited) {   // default: top 5 visible
+    VIZ.hidden = new Set([...series.keys()].slice(5));
+    VIZ.inited = true;
+  }
+  $("viz-chips").innerHTML = [...series.keys()].map(c => `
+    <button class="chip ${VIZ.hidden.has(c) ? "off" : ""}" data-cat="${esc(c)}" aria-pressed="${!VIZ.hidden.has(c)}">
+      <i style="background:${c === "Other" ? VIZ.other : vizColor(c)}"></i>${esc(c)}</button>`).join("");
+  for (const b of $("viz-chips").querySelectorAll(".chip"))
+    b.onclick = () => {
+      VIZ.hidden.has(b.dataset.cat) ? VIZ.hidden.delete(b.dataset.cat) : VIZ.hidden.add(b.dataset.cat);
+      renderTrend(label, period);
+    };
+
+  const vis = [...series.entries()].filter(([c]) => !VIZ.hidden.has(c));
+  if (!months.length || !vis.length) { $("trend").innerHTML = `<div class="viz-note">Nothing to plot.</div>`; return; }
+  const W = 760, H = 250, L = 52, R = 20, T = 12, B = 26;
+  const pw = W - L - R, ph = H - T - B;
+  const ymax = Math.max(...vis.flatMap(([, vals]) => vals), 1) * 1.08;
+  const X = i => months.length === 1 ? L + pw / 2 : L + pw * i / (months.length - 1);
+  const Y = v => T + ph - ph * v / ymax;
+  const ticks = [0.25, 0.5, 0.75, 1].map(f => ymax * f);
+  const step = Math.max(1, Math.ceil(months.length / 8));
+  const xlabels = months.map((m, i) => i % step === 0
+    ? `<text x="${X(i)}" y="${H - 8}" text-anchor="middle" font-size="9" fill="var(--muted)">${m}</text>` : "").join("");
+  const grid = ticks.map(v => `
+    <line x1="${L}" x2="${W - R}" y1="${Y(v)}" y2="${Y(v)}" stroke="var(--grid)" stroke-width="1"/>
+    <text x="${L - 6}" y="${Y(v) + 3}" text-anchor="end" font-size="9" fill="var(--muted)">${fmt$(v)}</text>`).join("");
+  const lines = vis.map(([c, vals]) => {
+    const col = c === "Other" ? VIZ.other : vizColor(c);
+    const d = vals.map((v, i) => `${i ? "L" : "M"}${X(i).toFixed(1)} ${Y(v).toFixed(1)}`).join(" ");
+    return `<path d="${d}" fill="none" stroke="${col}" stroke-width="2" stroke-linejoin="round"/>`;
+  }).join("");
+  const endLabels = vis.length <= 4 ? vis.map(([c, vals]) =>
+    `<text x="${W - R - 2}" y="${(Y(vals[vals.length - 1]) - 5).toFixed(1)}" text-anchor="end"
+       font-size="9" fill="var(--text-secondary)">${esc(c)}</text>`).join("") : "";
+  $("trend").innerHTML = `<svg id="trend-svg" viewBox="0 0 ${W} ${H}" role="img" aria-label="${label} per month">
+    ${grid}
+    <line x1="${L}" x2="${W - R}" y1="${T + ph}" y2="${T + ph}" stroke="var(--baseline)" stroke-width="1"/>
+    ${xlabels}${lines}${endLabels}
+    <g id="trend-hover" style="display:none">
+      <line id="th-line" y1="${T}" y2="${T + ph}" stroke="var(--baseline)" stroke-width="1"/>
+    </g>
+    <rect id="trend-cap" x="${L}" y="${T}" width="${pw}" height="${ph}" fill="transparent"/>
+  </svg>`;
+
+  const svg = $("trend-svg"), cap = $("trend-cap"), tip = $("viz-tip");
+  cap.addEventListener("mousemove", ev => {
+    const box = svg.getBoundingClientRect();
+    const fx = (ev.clientX - box.left) / box.width * W;
+    const i = Math.max(0, Math.min(months.length - 1,
+      Math.round((fx - L) / (pw / Math.max(1, months.length - 1)))));
+    $("th-line").setAttribute("x1", X(i)); $("th-line").setAttribute("x2", X(i));
+    $("trend-hover").style.display = "";
+    tip.style.display = "block";
+    const host = tip.parentElement.getBoundingClientRect();
+    const px = box.left - host.left + X(i) / W * box.width;
+    tip.style.left = Math.min(px + 12, host.width - 190) + "px";
+    tip.style.top = (box.top - host.top + 16) + "px";
+    tip.innerHTML = `<b>${months[i]}</b>` + vis
+      .map(([c, vals]) => [c, vals[i]]).sort((a, b) => b[1] - a[1])
+      .map(([c, v]) => `<div class="tr"><span><i style="background:${c === "Other" ? VIZ.other : vizColor(c)};display:inline-block"></i> ${esc(c)}</span><span>${fmt$(v)}</span></div>`).join("");
+  });
+  cap.addEventListener("mouseleave", () => {
+    $("trend-hover").style.display = "none"; tip.style.display = "none";
+  });
+}
+
 /* ---- unusual ---- */
 async function loadUnusual() {
   const res = await (await fetch("/api/unusual")).json();
@@ -509,7 +780,8 @@ async function loadUnusual() {
 
 /* ---- keyboard ---- */
 const KEYMAP = {a: "accept", e: "edit", s: "skip", t: "transfer", x: "oneoff",
-                r: "rejectsug", u: "undoskip", c: "context", d: "decisions", f: "unusual"};
+                r: "rejectsug", u: "undoskip", c: "context", d: "decisions",
+                f: "unusual", v: "charts"};
 document.addEventListener("keydown", ev => {
   if (busy || ev.ctrlKey || ev.metaKey || ev.altKey) return;
   if ($("picker").open) {
