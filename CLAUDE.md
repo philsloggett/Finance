@@ -34,6 +34,14 @@ build tooling (no npm/bundlers) unless it becomes genuinely necessary.
     budget taxonomy in `categories.yaml`. `Internal` marks transfers (spec §6);
     `Uncategorized` means unclassified, not a category.
 
+## Roadmap: email evidence lookup
+
+Planned: for ambiguous transactions, Claude searches the user's email (Gmail
+MCP) around the transaction date for receipts/invoices/records, and logs
+findings to the `evidence` table (`kind`, `ref`, `summary` per txn). Evidence
+informs a human decision — it never classifies by itself, consistent with
+spec 1.5 (the LLM proposes, a human approves).
+
 ## Git
 
 - Do **not** add `Co-Authored-By` trailers to commit messages.

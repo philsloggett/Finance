@@ -3,6 +3,7 @@ from __future__ import annotations
 import json
 import re
 import sqlite3
+from datetime import datetime, timezone
 from pathlib import Path
 
 import yaml
@@ -68,7 +69,8 @@ def append_rule(
         rule_id += "-x"
     existing.append(
         {"id": rule_id, "match": match, "pattern": pattern,
-         "budget": budget, "tax": tax, "source": source}
+         "budget": budget, "tax": tax, "source": source,
+         "added": datetime.now(timezone.utc).isoformat(timespec="seconds")}
     )
     save_rules(existing)
     return rule_id
@@ -76,6 +78,19 @@ def append_rule(
 
 def remove_rule(rule_id: str) -> None:
     save_rules([r for r in load_rules() if r["id"] != rule_id])
+
+
+def update_rule(rule_id: str, budget: str | None = None, active: bool | None = None) -> None:
+    all_rules = load_rules()
+    for r in all_rules:
+        if r["id"] == rule_id:
+            if budget is not None:
+                r["budget"] = budget
+            if active is not None:
+                r["active"] = active
+            save_rules(all_rules)
+            return
+    raise ValueError(f"no rule {rule_id!r}")
 
 
 def seed_from_legacy(con: sqlite3.Connection) -> tuple[int, int]:

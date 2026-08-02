@@ -5,6 +5,7 @@ import sqlite3
 from datetime import datetime, timezone
 from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 from pathlib import Path
+from urllib.parse import parse_qs, urlparse
 
 from ledger import classify, db, report, rules, suggest
 
@@ -113,6 +114,119 @@ def override(con: sqlite3.Connection, body: dict) -> dict:
     return {"overridden": len(txns)}
 
 
+def rules_list(con: sqlite3.Connection) -> list[dict]:
+    counts = {
+        row["rule_id"]: row
+        for row in con.execute(
+            "SELECT rule_id, COUNT(*) AS n, SUM(t.amount) AS total "
+            "FROM classifications c JOIN transactions t USING (txn_id) "
+            "WHERE c.rule_id IS NOT NULL GROUP BY rule_id"
+        )
+    }
+    items = []
+    for r in rules.load_rules():
+        c = counts.get(r["id"])
+        items.append(
+            {"id": r["id"], "match": r["match"], "pattern": r["pattern"],
+             "budget": r["budget"], "source": r.get("source", "manual"),
+             "active": bool(r.get("active", True)), "added": r.get("added"),
+             "n": c["n"] if c else 0, "total": c["total"] if c else 0}
+        )
+    items.sort(key=lambda x: (x["added"] or "", x["n"]), reverse=True)
+    return items
+
+
+def update_rule(con: sqlite3.Connection, body: dict) -> dict:
+    rules.update_rule(body["id"], body.get("budget"), body.get("active"))
+    classify.reclassify(con)
+    return {}
+
+
+def override_txn(con: sqlite3.Connection, body: dict) -> dict:
+    """Reclassify one specific transaction, overriding whatever rule matched it."""
+    con.execute(
+        "INSERT OR REPLACE INTO overrides (txn_id, budget_category, tax_category, note, "
+        "created_at) VALUES (?, ?, NULL, ?, ?)",
+        (body["txn_id"], body["budget"], body.get("note", "via context view"),
+         datetime.now(timezone.utc).isoformat(timespec="seconds")),
+    )
+    con.commit()
+    classify.reclassify(con)
+    return {}
+
+
+def occurrences(con: sqlite3.Connection, norm: str) -> list[dict]:
+    return [
+        dict(r)
+        for r in con.execute(
+            "SELECT txn_id, date, account_id, amount FROM transactions "
+            "WHERE norm_description = ? ORDER BY date",
+            (norm,),
+        )
+    ]
+
+
+def context(con: sqlite3.Connection, date_s: str, days: int = 7) -> list[dict]:
+    return [
+        dict(r)
+        for r in con.execute(
+            "SELECT t.txn_id, t.date, t.account_id, t.amount, t.raw_description, "
+            "t.norm_description, c.budget_category, c.source AS class_source "
+            "FROM transactions t JOIN classifications c USING (txn_id) "
+            "WHERE t.date BETWEEN date(?, ?) AND date(?, ?) "
+            "ORDER BY t.date, t.account_id, t.txn_id",
+            (date_s, f"-{days} days", date_s, f"+{days} days"),
+        )
+    ]
+
+
+def unusual(con: sqlite3.Connection) -> list[dict]:
+    """Flag payments worth a second look.
+
+    Implausibly large (data errors), spikes vs the merchant's own average, and
+    large round-number movements with no matched transfer (spec 6: usually a
+    transfer whose counterpart account isn't imported).
+    """
+    txns = con.execute(
+        "SELECT t.txn_id, t.date, t.account_id, t.amount, t.norm_description, "
+        "t.raw_description, c.budget_category, c.source AS class_source "
+        "FROM transactions t JOIN classifications c USING (txn_id)"
+    ).fetchall()
+    linked = {
+        r[0]
+        for r in con.execute(
+            "SELECT txn_a FROM transfer_links UNION SELECT txn_b FROM transfer_links"
+        )
+    }
+    flags: dict[str, dict] = {}
+
+    def flag(t: sqlite3.Row, reason: str) -> None:
+        flags.setdefault(t["txn_id"], {**dict(t), "reasons": []})["reasons"].append(reason)
+
+    by_norm: dict[str, list[sqlite3.Row]] = {}
+    for t in txns:
+        by_norm.setdefault(t["norm_description"], []).append(t)
+        if abs(t["amount"]) >= 100_000_00:
+            flag(t, "very large — confirm it's real (could be a data error)")
+    for ts in by_norm.values():
+        if len(ts) < 4:
+            continue
+        for t in ts:
+            others = [abs(x["amount"]) for x in ts if x["txn_id"] != t["txn_id"]]
+            avg = sum(others) / len(others)
+            if avg > 0 and abs(t["amount"]) >= 5 * avg and abs(t["amount"]) >= 500_00:
+                flag(t, f"{abs(t['amount']) / avg:.0f}x this merchant's average")
+    for t in txns:
+        if (
+            t["txn_id"] not in linked
+            and t["amount"] % 1000_00 == 0
+            and abs(t["amount"]) >= 1000_00
+            and (t["class_source"] == "unclassified" or t["budget_category"] == "Internal")
+        ):
+            flag(t, "large round amount, no matched transfer")
+    return sorted(flags.values(), key=lambda x: -abs(x["amount"]))[:100]
+
+
 def reject(con: sqlite3.Connection, body: dict) -> dict:
     con.execute(
         "UPDATE suggestions SET status = 'rejected' WHERE norm_description = ?",
@@ -143,24 +257,41 @@ class Handler(BaseHTTPRequestHandler):
             self.end_headers()
             self.wfile.write(data)
             return
-        if self.path.startswith("/api/state"):
-            con = db.connect()
-            self._send(
-                200,
-                {
-                    "progress": progress(con),
-                    "queue": queue_items(con),
-                    "categories": sorted(suggest.budget_enum()),
-                },
-            )
-            con.close()
+        url = urlparse(self.path)
+        q = {k: v[0] for k, v in parse_qs(url.query).items()}
+        routes = {
+            "/api/state": lambda con: {
+                "progress": progress(con),
+                "queue": queue_items(con),
+                "categories": sorted(suggest.budget_enum()),
+            },
+            "/api/rules": lambda con: {"rules": rules_list(con)},
+            "/api/unusual": lambda con: {"unusual": unusual(con)},
+            "/api/occurrences": lambda con: {"occurrences": occurrences(con, q["norm"])},
+            "/api/context": lambda con: {
+                "context": context(con, q["date"], int(q.get("days", 7)))
+            },
+        }
+        fn = routes.get(url.path)
+        if fn is None:
+            self._send(404, {"error": "not found"})
             return
-        self._send(404, {"error": "not found"})
+        con = db.connect()
+        try:
+            self._send(200, fn(con))
+        finally:
+            con.close()
 
     def do_POST(self) -> None:
         length = int(self.headers.get("Content-Length", 0))
         body = json.loads(self.rfile.read(length) or b"{}")
-        actions = {"/api/accept": accept, "/api/override": override, "/api/reject": reject}
+        actions = {
+            "/api/accept": accept,
+            "/api/override": override,
+            "/api/override_txn": override_txn,
+            "/api/reject": reject,
+            "/api/rules/update": update_rule,
+        }
         fn = actions.get(self.path)
         if fn is None:
             self._send(404, {"error": "not found"})

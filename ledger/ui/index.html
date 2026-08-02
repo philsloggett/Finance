@@ -55,20 +55,13 @@
   main { width: min(46rem, 100%); }
   .page {
     position: relative;
-    background:
-      repeating-linear-gradient(transparent 0 27px, var(--paper-line) 27px 28px),
-      var(--paper);
+    background: var(--paper);
     color: var(--ink);
-    border-radius: 2px;
-    box-shadow: 0 1px 0 #ffffff22 inset, 0 12px 30px #0007, 4px 0 0 -1px var(--gilt);
-    padding: 1.4rem 1.6rem 1.1rem 2.6rem;
+    border-radius: 4px;
+    border-left: 3px solid var(--margin-rule);
+    box-shadow: 0 12px 30px #0007;
+    padding: 1.5rem 1.7rem 1.3rem;
     min-height: 21rem;
-  }
-  .page::before {              /* the red margin rule */
-    content: ""; position: absolute; top: 0; bottom: 0; left: 1.7rem;
-    border-left: 1px solid var(--margin-rule);
-    border-right: 1px solid var(--margin-rule);
-    width: 3px;
   }
   .entry-meta {
     display: flex; gap: 1.1rem; flex-wrap: wrap;
@@ -80,15 +73,18 @@
   .amount.credit { color: var(--credit); }
   .norm {
     font-family: var(--mono); font-size: 1.32rem; font-weight: 700;
-    line-height: 28px; letter-spacing: 0.02em; overflow-wrap: anywhere;
+    line-height: 1.4; letter-spacing: 0.02em; overflow-wrap: anywhere;
+    margin: 0.5rem 0 0.7rem;
   }
-  .samples { margin-top: 0.2rem; }
+  .samples {
+    padding: 0.5rem 0.7rem; background: #e2e6d2; border-radius: 3px;
+  }
   .samples div {
     font-family: var(--mono); font-size: 0.78rem; color: var(--ink-faint);
-    line-height: 28px; white-space: pre-wrap; overflow-wrap: anywhere;
+    line-height: 1.7; white-space: pre-wrap; overflow-wrap: anywhere;
   }
   .suggest-line {
-    margin-top: 0.6rem; line-height: 28px;
+    margin-top: 0.9rem; line-height: 1.6;
     font-size: 0.9rem; display: flex; gap: 0.6rem; align-items: baseline; flex-wrap: wrap;
   }
   .suggest-line .cat { font-weight: 700; }
@@ -101,7 +97,39 @@
   .badge.conflict { color: var(--debit); }
   .conflict-cats { font-size: 0.85rem; }
 
-  .done-msg { line-height: 28px; font-size: 1rem; padding-top: 28px; }
+  .done-msg { line-height: 1.7; font-size: 1rem; padding-top: 1rem; }
+
+  /* ---- list panels (context / decisions / unusual) ---- */
+  .panel-list {
+    max-height: 60vh; overflow-y: auto; margin-top: 0.6rem;
+    font-family: var(--mono); font-size: 0.76rem;
+  }
+  .panel-list .row {
+    display: flex; gap: 0.7rem; align-items: baseline; padding: 0.22rem 0.35rem;
+    border-radius: 3px; line-height: 1.5;
+  }
+  .panel-list .row:nth-child(odd) { background: #e6e9d8; }
+  .panel-list .row.focal { outline: 2px solid var(--gilt); }
+  .panel-list .date { color: var(--ink-faint); white-space: nowrap; }
+  .panel-list .acct { color: var(--ink-faint); width: 4.2rem; }
+  .panel-list .amt { min-width: 7rem; text-align: right; font-weight: 600; }
+  .panel-list .desc { flex: 1; overflow-wrap: anywhere; }
+  .panel-list .cat { color: var(--ink-faint); font-family: var(--sans); font-size: 0.74rem; white-space: nowrap; }
+  .panel-list .why { color: var(--debit); font-family: var(--sans); font-size: 0.74rem; }
+  .panel-list button {
+    all: unset; cursor: pointer; font-family: var(--sans); font-size: 0.7rem;
+    padding: 0 0.35rem; border: 1px solid var(--paper-line); border-radius: 3px;
+    color: var(--ink-faint); white-space: nowrap;
+  }
+  .panel-list button:hover, .panel-list button:focus-visible { background: #d9decc; outline: none; }
+  .panel-list .row.inactive { opacity: 0.45; }
+  .panel-head { display: flex; gap: 0.7rem; align-items: center; margin-top: 0.2rem; }
+  .panel-head select, .panel-head input {
+    font-family: var(--mono); font-size: 0.78rem; color: var(--ink);
+    background: #fff; border: 1px solid var(--paper-line); border-radius: 3px;
+    padding: 0.28rem 0.4rem;
+  }
+  .panel-head input { flex: 1; }
 
   /* ---- actions ---- */
   footer {
@@ -129,6 +157,7 @@
     background: var(--paper); color: var(--ink);
     box-shadow: 0 18px 50px #000a; width: min(38rem, 92vw);
   }
+  #ctx, #dec, #unu { width: min(52rem, 95vw); }
   dialog::backdrop { background: #16211ac9; }
   dialog h2 {
     font-size: 0.75rem; letter-spacing: 0.2em; text-transform: uppercase;
@@ -173,8 +202,31 @@
     <button data-act="oneoff"><kbd>x</kbd>one-off</button>
     <button data-act="rejectsug"><kbd>r</kbd>reject sugg.</button>
     <button data-act="undoskip"><kbd>u</kbd>unskip</button>
+    <button data-act="context"><kbd>c</kbd>context</button>
+    <button data-act="decisions"><kbd>d</kbd>decisions</button>
+    <button data-act="unusual"><kbd>f</kbd>flagged</button>
     <span class="status" id="status"></span>
   </footer>
+
+  <dialog id="ctx">
+    <h2>In context — surrounding transactions</h2>
+    <div class="panel-head">
+      <select id="occ"></select>
+      <span style="font-size:0.74rem;color:var(--ink-faint)">±7 days, all accounts · click override to fix one txn</span>
+    </div>
+    <div class="panel-list" id="ctx-list"></div>
+  </dialog>
+
+  <dialog id="dec">
+    <h2>Decisions — your rules, newest first</h2>
+    <div class="panel-head"><input id="dec-filter" placeholder="filter by merchant or category…" spellcheck="false"></div>
+    <div class="panel-list" id="dec-list"></div>
+  </dialog>
+
+  <dialog id="unu">
+    <h2>Flagged — unusual payments</h2>
+    <div class="panel-list" id="unu-list"></div>
+  </dialog>
 
   <dialog id="picker">
     <h2 id="picker-title">Choose category</h2>
@@ -204,7 +256,9 @@ function renderProgress(p) {
     const el = $("acct-" + a.id);
     if (!el) continue;
     const pct = a.vol ? Math.round(100 * a.vol_c / a.vol) : 0;
-    el.innerHTML = `<div class="lbl"><span>${a.id}</span><span>${pct}% of $</span></div>
+    el.title = `${a.id}: ${cents(a.vol_c)} of ${cents(a.vol)} categorised `
+      + `(${a.rows_c} of ${a.rows} transactions)`;
+    el.innerHTML = `<div class="lbl"><span>${a.id}</span><span>${pct}% of $ categorised</span></div>
       <div class="bar"><i style="width:${pct}%"></i></div>`;
   }
 }
@@ -307,35 +361,145 @@ const actions = {
     if (!it?.suggestion) return;
     if (await post("/api/reject", {norm: it.norm})) { it.suggestion = null; renderItem(); }
   },
+  context() { if (current()) openContext(current()); },
+  decisions() { loadDecisions(); $("dec").showModal(); },
+  unusual() { loadUnusual(); $("unu").showModal(); },
 };
 
-/* ---- picker ---- */
-let pickerOverride = false;
-function openPicker(asOverride) {
-  const it = current();
-  pickerOverride = asOverride;
-  $("picker-title").textContent = asOverride
-    ? "One-off — override these txns, no rule" : "Choose category → rule";
-  $("as-override").checked = asOverride;
-  $("match").value = it.suggestion?.suggested_match_type ?? "exact";
-  $("pattern").value = it.suggestion?.suggested_pattern ?? it.norm;
-  const hot = new Set([...(it.conflict ?? []), it.suggestion?.budget_category].filter(Boolean));
+/* ---- picker (shared by review item, rule edit, txn override) ---- */
+let pickerMode = {type: "item"};
+function renderCats(hot) {
   $("cats").innerHTML = state.categories.map((c, i) =>
     `<button data-cat="${esc(c)}" class="${hot.has(c) ? "hot" : ""}">
        <kbd>${KEYS[i]}</kbd>${esc(c)}</button>`).join("");
   for (const b of $("cats").querySelectorAll("button"))
     b.onclick = () => pickCategory(b.dataset.cat);
+}
+
+function openPicker(asOverride) {
+  const it = current();
+  pickerMode = {type: "item"};
+  $("picker-title").textContent = asOverride
+    ? "One-off — override these txns, no rule" : "Choose category → rule";
+  $("pattern-row").style.display = "";
+  $("as-override").checked = asOverride;
+  $("match").value = it.suggestion?.suggested_match_type ?? "exact";
+  $("pattern").value = it.suggestion?.suggested_pattern ?? it.norm;
+  renderCats(new Set([...(it.conflict ?? []), it.suggestion?.budget_category].filter(Boolean)));
   $("picker").showModal();
 }
 
-function pickCategory(cat) {
+function openPickerFor(mode, title, hotCat) {
+  pickerMode = mode;
+  $("picker-title").textContent = title;
+  $("pattern-row").style.display = "none";
+  renderCats(new Set([hotCat].filter(Boolean)));
+  $("picker").showModal();
+}
+
+async function pickCategory(cat) {
   $("picker").close();
-  acceptWith(cat, $("match").value, $("pattern").value, $("as-override").checked);
+  const m = pickerMode;
+  if (m.type === "item")
+    acceptWith(cat, $("match").value, $("pattern").value, $("as-override").checked);
+  else if (m.type === "rule") {
+    if (await post("/api/rules/update", {id: m.id, budget: cat})) loadDecisions();
+  } else if (m.type === "txn") {
+    if (await post("/api/override_txn", {txn_id: m.txnId, budget: cat})) loadContext();
+  }
+}
+
+/* ---- context view ---- */
+let ctxState = {occ: [], focal: null};
+async function openContext(item) {
+  const res = await (await fetch("/api/occurrences?norm=" + encodeURIComponent(item.norm))).json();
+  ctxState.occ = res.occurrences;
+  const biggest = ctxState.occ.reduce((a, b) => Math.abs(b.amount) > Math.abs(a.amount) ? b : a);
+  $("occ").innerHTML = ctxState.occ.map(o =>
+    `<option value="${o.txn_id}" ${o.txn_id === biggest.txn_id ? "selected" : ""}>
+       ${o.date} · ${cents(o.amount)} · ${o.account_id}</option>`).join("");
+  $("occ").onchange = loadContext;
+  $("ctx").showModal();
+  loadContext();
+}
+
+async function openContextAt(date, txnId) {
+  ctxState.occ = [{txn_id: txnId, date}];
+  $("occ").innerHTML = `<option value="${txnId}" selected>${date}</option>`;
+  $("occ").onchange = loadContext;
+  $("ctx").showModal();
+  loadContext();
+}
+
+async function loadContext() {
+  const focalId = $("occ").value;
+  const focal = ctxState.occ.find(o => o.txn_id === focalId);
+  const res = await (await fetch(`/api/context?date=${focal.date}&days=7`)).json();
+  $("ctx-list").innerHTML = res.context.map(t => `
+    <div class="row ${t.txn_id === focalId ? "focal" : ""}">
+      <span class="date">${t.date}</span><span class="acct">${t.account_id}</span>
+      <span class="amt amount ${t.amount < 0 ? "debit" : "credit"}">${cents(t.amount)}</span>
+      <span class="desc">${esc(t.raw_description.replace(/\n/g, " "))}</span>
+      <span class="cat">${esc(t.budget_category ?? "—")}${t.class_source === "override" ? " ✱" : ""}</span>
+      <button data-txn="${t.txn_id}" data-cat="${esc(t.budget_category ?? "")}">override</button>
+    </div>`).join("");
+  for (const b of $("ctx-list").querySelectorAll("button"))
+    b.onclick = () => openPickerFor({type: "txn", txnId: b.dataset.txn},
+      "Override this one transaction", b.dataset.cat || null);
+  $("ctx-list").querySelector(".focal")?.scrollIntoView({block: "center"});
+}
+
+/* ---- decisions ---- */
+let decRules = [];
+async function loadDecisions() {
+  decRules = (await (await fetch("/api/rules")).json()).rules;
+  renderDecisions();
+}
+function renderDecisions() {
+  const f = $("dec-filter").value.toLowerCase();
+  const shown = decRules.filter(r =>
+    !f || r.pattern.toLowerCase().includes(f) || r.budget.toLowerCase().includes(f)).slice(0, 400);
+  $("dec-list").innerHTML = shown.map(r => `
+    <div class="row ${r.active ? "" : "inactive"}">
+      <span class="cat">${r.source === "imported_legacy" ? "legacy" : r.source === "llm_approved" ? "llm✓" : "manual"}</span>
+      <span class="desc">${r.match === "exact" ? "" : r.match + " "}${esc(r.pattern)}</span>
+      <span class="cat"><b>${esc(r.budget)}</b></span>
+      <span class="amt amount ${r.total < 0 ? "debit" : "credit"}">${cents(r.total)}</span>
+      <span class="cat">${r.n} txns</span>
+      <button data-id="${r.id}" data-act="recat" data-cat="${esc(r.budget)}">change</button>
+      <button data-id="${r.id}" data-act="toggle">${r.active ? "disable" : "enable"}</button>
+    </div>`).join("");
+  for (const b of $("dec-list").querySelectorAll("button")) {
+    if (b.dataset.act === "recat")
+      b.onclick = () => openPickerFor({type: "rule", id: b.dataset.id},
+        "Change this rule's category", b.dataset.cat);
+    else
+      b.onclick = async () => {
+        const r = decRules.find(x => x.id === b.dataset.id);
+        if (await post("/api/rules/update", {id: r.id, active: !r.active})) loadDecisions();
+      };
+  }
+}
+
+/* ---- unusual ---- */
+async function loadUnusual() {
+  const res = await (await fetch("/api/unusual")).json();
+  $("unu-list").innerHTML = res.unusual.map(t => `
+    <div class="row">
+      <span class="date">${t.date}</span><span class="acct">${t.account_id}</span>
+      <span class="amt amount ${t.amount < 0 ? "debit" : "credit"}">${cents(t.amount)}</span>
+      <span class="desc">${esc(t.raw_description.replace(/\n/g, " "))}
+        <span class="why">${t.reasons.map(esc).join(" · ")}</span></span>
+      <span class="cat">${esc(t.budget_category ?? "—")}</span>
+      <button data-date="${t.date}" data-txn="${t.txn_id}">context</button>
+    </div>`).join("");
+  for (const b of $("unu-list").querySelectorAll("button"))
+    b.onclick = () => { $("unu").close(); openContextAt(b.dataset.date, b.dataset.txn); };
 }
 
 /* ---- keyboard ---- */
-const KEYMAP = {a: "accept", e: "edit", s: "skip", t: "transfer",
-                x: "oneoff", r: "rejectsug", u: "undoskip"};
+const KEYMAP = {a: "accept", e: "edit", s: "skip", t: "transfer", x: "oneoff",
+                r: "rejectsug", u: "undoskip", c: "context", d: "decisions", f: "unusual"};
 document.addEventListener("keydown", ev => {
   if (busy || ev.ctrlKey || ev.metaKey || ev.altKey) return;
   if ($("picker").open) {
@@ -347,11 +511,13 @@ document.addEventListener("keydown", ev => {
     }
     return;
   }
+  if (document.querySelector("dialog[open]")) return;  // Esc closes natively
   if (ev.target.tagName === "INPUT") return;
   if (ev.key === "g") { fetchState(); return; }
   const act = KEYMAP[ev.key];
   if (act) { ev.preventDefault(); actions[act](); }
 });
+$("dec-filter").addEventListener("input", renderDecisions);
 for (const b of document.querySelectorAll("footer button"))
   b.onclick = () => actions[b.dataset.act]();
 

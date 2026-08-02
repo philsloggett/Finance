@@ -641,6 +641,12 @@ rules:
   budget: Clothing and Personal Care
   tax: null
   source: imported_legacy
+- id: kmart
+  match: prefix
+  pattern: KMART
+  budget: Clothing and Personal Care
+  tax: null
+  source: llm_approved
 - id: kmart-broadway-tap-and-pay
   match: exact
   pattern: KMART BROADWAY TAP AND PAY
@@ -2531,6 +2537,12 @@ rules:
   budget: Fast Food
   tax: null
   source: imported_legacy
+- id: crumbs-cake-shop-surry-hills
+  match: exact
+  pattern: CRUMBS CAKE SHOP SURRY HILLS
+  budget: Fast Food
+  tax: null
+  source: llm_approved
 - id: crust-drummoyne-drummoyne
   match: exact
   pattern: CRUST DRUMMOYNE DRUMMOYNE
@@ -3821,12 +3833,24 @@ rules:
   budget: Fast Food
   tax: null
   source: imported_legacy
+- id: pasticceria-il-biond
+  match: prefix
+  pattern: PASTICCERIA IL BIOND
+  budget: Fast Food
+  tax: null
+  source: llm_approved
 - id: pasticceria-il-biond-haberfield-tap-and
   match: exact
   pattern: 'PASTICCERIA IL BIOND HABERFIELD TAP AND '
   budget: Fast Food
   tax: null
   source: imported_legacy
+- id: pasticceria-papa
+  match: prefix
+  pattern: PASTICCERIA PAPA
+  budget: Fast Food
+  tax: null
+  source: llm_approved
 - id: pasticceria-papa-hab-haberfield-tap-and
   match: exact
   pattern: 'PASTICCERIA PAPA HAB HABERFIELD TAP AND '
@@ -4025,6 +4049,12 @@ rules:
   budget: Fast Food
   tax: null
   source: imported_legacy
+- id: store-espresso-camperdown-x
+  match: prefix
+  pattern: STORE ESPRESSO CAMPERDOWN
+  budget: Fast Food
+  tax: null
+  source: llm_approved
 - id: strawbery-hills-hotel-surry-hills
   match: exact
   pattern: STRAWBERY HILLS HOTEL SURRY HILLS
@@ -4157,6 +4187,12 @@ rules:
   budget: Fast Food
   tax: null
   source: imported_legacy
+- id: the-corner-booth-annandale
+  match: exact
+  pattern: THE CORNER BOOTH ANNANDALE
+  budget: Fast Food
+  tax: null
+  source: llm_approved
 - id: the-dining-co-cast-castle-hill
   match: exact
   pattern: THE DINING & CO CAST CASTLE HILL
@@ -4265,6 +4301,12 @@ rules:
   budget: Fast Food
   tax: null
   source: imported_legacy
+- id: uber-eats
+  match: prefix
+  pattern: UBER *EATS
+  budget: Fast Food
+  tax: null
+  source: llm_approved
 - id: uber-eats-help-uber-c-sydney
   match: exact
   pattern: UBER *EATS HELP.UBER.C SYDNEY
@@ -4403,12 +4445,24 @@ rules:
   budget: Fast Food
   tax: null
   source: imported_legacy
+- id: ccweb-sdro-parramatta
+  match: exact
+  pattern: CCWEB SDRO PARRAMATTA
+  budget: Fines and infringements
+  tax: null
+  source: llm_approved
 - id: recoveries-corp-melbourne
   match: exact
   pattern: RECOVERIES CORP MELBOURNE
   budget: Fines and infringements
   tax: null
   source: imported_legacy
+- id: sdro-infrngmnt-payme-maitland
+  match: exact
+  pattern: SDRO INFRNGMNT PAYME MAITLAND
+  budget: Fines and infringements
+  tax: null
+  source: llm_approved
 - id: aldi-stores-broadway-broadway
   match: exact
   pattern: ALDI STORES - BROADWAY BROADWAY
@@ -4655,6 +4709,12 @@ rules:
   budget: Food and Groceries
   tax: null
   source: imported_legacy
+- id: coles-five-dock
+  match: exact
+  pattern: COLES FIVE DOCK
+  budget: Food and Groceries
+  tax: null
+  source: llm_approved
 - id: coles-five-dock-tap-and-pay
   match: exact
   pattern: COLES FIVE DOCK TAP AND PAY
@@ -5435,6 +5495,12 @@ rules:
   budget: Insurance
   tax: null
   source: imported_legacy
+- id: debit-interest-charged-on-this-account
+  match: exact
+  pattern: DEBIT INTEREST CHARGED ON THIS ACCOUNT
+  budget: Interest
+  tax: null
+  source: llm_approved
 - id: auto-payment-declined
   match: exact
   pattern: AUTO PAYMENT - DECLINED
@@ -5465,6 +5531,18 @@ rules:
   budget: Internal
   tax: null
   source: imported_legacy
+- id: transfer-from-commbank-app
+  match: exact
+  pattern: TRANSFER FROM COMMBANK APP
+  budget: Internal
+  tax: null
+  source: llm_approved
+- id: transfer-to-commbank-app
+  match: exact
+  pattern: TRANSFER TO COMMBANK APP
+  budget: Internal
+  tax: null
+  source: llm_approved
 - id: transfer-to-commbank-app-cc-payment
   match: exact
   pattern: TRANSFER TO COMMBANK APP CC PAYMENT
@@ -5999,6 +6077,12 @@ rules:
   budget: Medical, Health and Fitness
   tax: null
   source: imported_legacy
+- id: bendigo-bank-mum-covid
+  match: exact
+  pattern: BENDIGO BANK MUM COVID
+  budget: Mum inheritance
+  tax: null
+  source: llm_approved
 - id: fast-transfer-from-p-j-bovard-birthday
   match: exact
   pattern: FAST TRANSFER FROM P J BOVARD BIRTHDAY
@@ -6029,6 +6113,12 @@ rules:
   budget: Mum inheritance
   tax: null
   source: imported_legacy
+- id: transfer-from-p-j-bovard
+  match: prefix
+  pattern: TRANSFER FROM P J BOVARD
+  budget: Mum inheritance
+  tax: null
+  source: llm_approved
 - id: transfer-from-p-j-bovard-eis
   match: exact
   pattern: TRANSFER FROM P J BOVARD EIS
@@ -6059,6 +6149,18 @@ rules:
   budget: Other
   tax: null
   source: imported_legacy
+- id: amazon-au-marketplace-sydney
+  match: exact
+  pattern: AMAZON AU MARKETPLACE SYDNEY
+  budget: Other
+  tax: null
+  source: llm_approved
+- id: amazon-au-retail-sydney
+  match: exact
+  pattern: AMAZON AU RETAIL SYDNEY
+  budget: Other
+  tax: null
+  source: llm_approved
 - id: angelo-economos-newtown
   match: exact
   pattern: ANGELO ECONOMOS NEWTOWN
@@ -6599,6 +6701,12 @@ rules:
   budget: Other
   tax: null
   source: imported_legacy
+- id: wdl-atm
+  match: prefix
+  pattern: WDL ATM
+  budget: Other
+  tax: null
+  source: llm_approved
 - id: wdl-atm-cba-atm-mp-leichardt-c
   match: exact
   pattern: WDL ATM CBA ATM MP LEICHARDT C
@@ -7709,12 +7817,30 @@ rules:
   budget: Recreation Travel and Entertainment
   tax: null
   source: imported_legacy
+- id: raine-horne-ne-rcpt
+  match: prefix
+  pattern: RAINE & HORNE NE RCPT
+  budget: Rent
+  tax: null
+  source: llm_approved
+- id: raine-horne-ne-rent
+  match: exact
+  pattern: RAINE & HORNE NE RENT
+  budget: Rent
+  tax: null
+  source: llm_approved
 - id: raine-horne-ne-rent-payment
   match: exact
   pattern: RAINE & HORNE NE RENT PAYMENT
   budget: Rent
   tax: null
   source: imported_legacy
+- id: raine-horne-ne-rent-paymnt-slogp
+  match: exact
+  pattern: RAINE & HORNE NE RENT PAYMNT SLOGP
+  budget: Rent
+  tax: null
+  source: llm_approved
 - id: raine-horne-newtow-newtown
   match: exact
   pattern: RAINE & HORNE NEWTOW NEWTOWN
@@ -7787,6 +7913,12 @@ rules:
   budget: Sale
   tax: null
   source: imported_legacy
+- id: commonwealth-sec-commsec
+  match: exact
+  pattern: COMMONWEALTH SEC COMMSEC
+  budget: Shares Sales
+  tax: null
+  source: llm_approved
 - id: cpu-plan-manager-itbhp
   match: exact
   pattern: CPU PLAN MANAGER ITBHP
@@ -7811,6 +7943,12 @@ rules:
   budget: Strata
   tax: null
   source: imported_legacy
+- id: deft-payments-netbank-bpay-strata
+  match: prefix
+  pattern: DEFT PAYMENTS NETBANK BPAY STRATA
+  budget: Strata
+  tax: null
+  source: llm_approved
 - id: 7-eleven-castle-hill
   match: exact
   pattern: 7-ELEVEN CASTLE HILL
@@ -8519,6 +8657,18 @@ rules:
   budget: Transport and Auto
   tax: null
   source: imported_legacy
+- id: transfer-to-audi-sutherland
+  match: prefix
+  pattern: TRANSFER TO AUDI SUTHERLAND
+  budget: Transport and Auto
+  tax: null
+  source: llm_approved
+- id: transfer-to-cba-a-c-netbank-car-space
+  match: prefix
+  pattern: TRANSFER TO CBA A/C NETBANK CAR SPACE
+  budget: Transport and Auto
+  tax: null
+  source: llm_approved
 - id: transportfornsw-opal-chippendale
   match: exact
   pattern: TRANSPORTFORNSW OPAL CHIPPENDALE

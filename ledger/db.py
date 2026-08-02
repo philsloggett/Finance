@@ -104,6 +104,17 @@ CREATE TABLE IF NOT EXISTS legacy_conflicts (
   txn_count        INTEGER NOT NULL
 );
 
+-- External corroboration for a transaction (email receipt, invoice, note).
+-- Populated by the planned Claude email-lookup flow; never classifies by itself.
+CREATE TABLE IF NOT EXISTS evidence (
+  evidence_id INTEGER PRIMARY KEY,
+  txn_id      TEXT NOT NULL REFERENCES transactions(txn_id) ON DELETE CASCADE,
+  kind        TEXT NOT NULL CHECK (kind IN ('email','receipt','invoice','note')),
+  ref         TEXT NOT NULL,
+  summary     TEXT NOT NULL,
+  created_at  TEXT NOT NULL
+);
+
 CREATE TABLE IF NOT EXISTS meta (
   key   TEXT PRIMARY KEY,
   value TEXT NOT NULL
