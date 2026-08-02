@@ -2724,6 +2724,13 @@ rules:
   budget: Fast Food
   tax: null
   source: imported_legacy
+- id: crust-rozelle
+  match: prefix
+  pattern: CRUST - ROZELLE
+  budget: Fast Food
+  tax: null
+  source: llm_approved
+  added: '2026-08-02T11:48:54+00:00'
 - id: cstl-terce-chn-cu-pl-castle-hill
   match: exact
   pattern: CSTL TERCE CHN CU PL CASTLE HILL
@@ -3206,6 +3213,13 @@ rules:
   budget: Fast Food
   tax: null
   source: imported_legacy
+- id: happyfield
+  match: prefix
+  pattern: HAPPYFIELD
+  budget: Fast Food
+  tax: null
+  source: llm_approved
+  added: '2026-08-02T11:46:51+00:00'
 - id: happyfield-haberfi-ashfield
   match: exact
   pattern: HAPPYFIELD HABERFI ASHFIELD
@@ -3961,6 +3975,13 @@ rules:
   budget: Fast Food
   tax: null
   source: imported_legacy
+- id: montage-piazza-lilyfield
+  match: exact
+  pattern: MONTAGE PIAZZA LILYFIELD
+  budget: Fast Food
+  tax: null
+  source: llm_approved
+  added: '2026-08-02T11:47:03+00:00'
 - id: mordeo-pasta-panini-sydney
   match: exact
   pattern: MORDEO PASTA & PANINI SYDNEY
@@ -4075,6 +4096,13 @@ rules:
   budget: Fast Food
   tax: null
   source: imported_legacy
+- id: ol-central-pty-ltd-sydney
+  match: exact
+  pattern: OL CENTRAL PTY LTD SYDNEY
+  budget: Fast Food
+  tax: null
+  source: llm_approved
+  added: '2026-08-02T11:46:46+00:00'
 - id: pacific-concepts-me-u-the-rocks
   match: exact
   pattern: PACIFIC CONCEPTS* ME&U THE ROCKS
@@ -4282,6 +4310,13 @@ rules:
   budget: Fast Food
   tax: null
   source: imported_legacy
+- id: sonoma-leichhardt-leichhardt
+  match: exact
+  pattern: SONOMA LEICHHARDT LEICHHARDT
+  budget: Fast Food
+  tax: null
+  source: manual
+  added: '2026-08-02T11:41:13+00:00'
 - id: soul-origin-lidcombe-lidcombe
   match: exact
   pattern: SOUL ORIGIN LIDCOMBE LIDCOMBE
@@ -5056,6 +5091,13 @@ rules:
   budget: Food and Groceries
   tax: null
   source: imported_legacy
+- id: coles-leichhardt-02
+  match: exact
+  pattern: COLES LEICHHARDT 02
+  budget: Food and Groceries
+  tax: null
+  source: llm_approved
+  added: '2026-08-02T11:47:13+00:00'
 - id: coles-macquarie-pk
   match: exact
   pattern: COLES MACQUARIE PK
@@ -5622,6 +5664,13 @@ rules:
   budget: Food and Groceries
   tax: null
   source: imported_legacy
+- id: woolworths
+  match: prefix
+  pattern: WOOLWORTHS
+  budget: Food and Groceries
+  tax: null
+  source: llm_approved
+  added: '2026-08-02T11:46:27+00:00'
 - id: woolworths-alexandria
   match: exact
   pattern: WOOLWORTHS ALEXANDRIA
@@ -5845,6 +5894,13 @@ rules:
   tax: null
   source: manual
   added: '2026-08-02T10:48:26+00:00'
+- id: credit-interest
+  match: exact
+  pattern: CREDIT INTEREST
+  budget: Interest
+  tax: null
+  source: llm_approved
+  added: '2026-08-02T11:46:19+00:00'
 - id: debit-interest-charged-on-this-account
   match: exact
   pattern: DEBIT INTEREST CHARGED ON THIS ACCOUNT
@@ -8321,6 +8377,20 @@ rules:
   budget: Recreation Travel and Entertainment
   tax: null
   source: imported_legacy
+- id: deft-real-estate
+  match: prefix
+  pattern: DEFT REAL ESTATE
+  budget: Rent
+  tax: null
+  source: llm_approved
+  added: '2026-08-02T11:46:36+00:00'
+- id: deft-rent
+  match: prefix
+  pattern: DEFT RENT
+  budget: Rent
+  tax: null
+  source: llm_approved
+  added: '2026-08-02T11:46:56+00:00'
 - id: raine-horne-ne-rcpt
   match: prefix
   pattern: RAINE & HORNE NE RCPT
@@ -8381,6 +8451,13 @@ rules:
   budget: Salary
   tax: null
   source: imported_legacy
+- id: salary-fin-design
+  match: prefix
+  pattern: SALARY FIN DESIGN
+  budget: Salary
+  tax: null
+  source: llm_approved
+  added: '2026-08-02T11:46:02+00:00'
 - id: salary-fin-design-eff-salary-fin
   match: exact
   pattern: SALARY FIN DESIGN & EFF SALARY FIN

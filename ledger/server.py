@@ -79,6 +79,26 @@ def accept(con: sqlite3.Connection, body: dict) -> dict:
         "SELECT * FROM suggestions WHERE norm_description = ? AND status = 'pending'",
         (norm,),
     ).fetchone()
+    existing = next(
+        (r for r in rules.load_rules()
+         if r["match"] == body["match"] and r["pattern"] == body["pattern"]),
+        None,
+    )
+    if existing:
+        if existing["budget"] != body["budget"]:
+            raise ValueError(
+                f"rule {existing['id']!r} already maps this pattern to "
+                f"{existing['budget']!r} — change it in the decisions panel instead"
+            )
+        # same decision made twice (stale queue) — just tidy up
+        if sug:
+            con.execute(
+                "UPDATE suggestions SET status = 'approved' WHERE norm_description = ?",
+                (norm,),
+            )
+        con.execute("DELETE FROM legacy_conflicts WHERE norm_description = ?", (norm,))
+        con.commit()
+        return {"rule_id": existing["id"]}
     followed = (
         sug is not None
         and body["budget"] == sug["budget_category"]

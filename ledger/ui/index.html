@@ -422,11 +422,26 @@ function setStatus(msg, err = false) {
   el.className = "status" + (err ? " err" : "");
 }
 
+function ruleCovers(match, pattern, norm) {
+  if (match === "exact") return norm === pattern;
+  if (match === "prefix") return norm.startsWith(pattern);
+  if (match === "substring") return norm.includes(pattern);
+  try { return new RegExp(pattern).test(norm); } catch { return false; }
+}
+
 async function acceptWith(budget, match, pattern, asOverride = false) {
   const it = current();
   const path = asOverride ? "/api/override" : "/api/accept";
   const ok = await post(path, {norm: it.norm, budget, match, pattern});
-  if (ok) advance();
+  if (!ok) return;
+  if (asOverride) { advance(); return; }
+  // the new rule may have resolved other queued strings — sweep them too
+  const before = state.queue.length;
+  state.queue = state.queue.filter(q => !ruleCovers(match, pattern, q.norm));
+  if (idx >= state.queue.length) idx = Math.max(0, state.queue.length - 1);
+  const swept = before - state.queue.length - 1;
+  if (swept > 0) setStatus(`rule also cleared ${swept} more queued item${swept > 1 ? "s" : ""}`);
+  renderItem(true);
 }
 
 const actions = {
