@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import json
+import re
 import sqlite3
 from datetime import datetime, timezone
 from pathlib import Path
@@ -8,6 +9,23 @@ from pathlib import Path
 import yaml
 
 from ledger import report
+
+
+def covers(match_type: str, pattern: str, norm: str) -> bool:
+    """Would a rule with this pattern actually classify this string?"""
+    match match_type:
+        case "exact":
+            return norm == pattern
+        case "prefix":
+            return norm.startswith(pattern)
+        case "substring":
+            return pattern in norm
+        case "regex":
+            try:
+                return re.search(pattern, norm) is not None
+            except re.error:
+                return False
+    return False
 
 CATEGORIES_PATH = Path(__file__).parent / "config" / "categories.yaml"
 
@@ -79,6 +97,11 @@ def store_items(con: sqlite3.Connection, items: list, model: str) -> tuple[int, 
         if not ok:
             dropped += 1
             continue
+        # a pattern that doesn't cover its own string produces a dead rule on
+        # accept — fall back to the always-correct exact match
+        if not covers(it["suggested_match_type"], it["suggested_pattern"], it["norm_description"]):
+            it["suggested_match_type"] = "exact"
+            it["suggested_pattern"] = it["norm_description"]
         con.execute(
             "INSERT OR REPLACE INTO suggestions (norm_description, budget_category, "
             "tax_category, confidence, suggested_pattern, suggested_match_type, model, "

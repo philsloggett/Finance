@@ -75,6 +75,11 @@ def queue_items(con: sqlite3.Connection, limit: int = 200) -> list[dict]:
 def accept(con: sqlite3.Connection, body: dict) -> dict:
     """Write a rule (spec 7: accepting writes a rule, not labels), then reclassify."""
     norm = body["norm"]
+    if not suggest.covers(body["match"], body["pattern"], norm):
+        raise ValueError(
+            f"{body['match']} pattern {body['pattern']!r} doesn't match this "
+            f"merchant string — fix the pattern or use exact"
+        )
     sug = con.execute(
         "SELECT * FROM suggestions WHERE norm_description = ? AND status = 'pending'",
         (norm,),

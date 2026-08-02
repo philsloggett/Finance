@@ -135,6 +135,13 @@ rules:
   budget: Children and Pets
   tax: null
   source: imported_legacy
+- id: future-swim-leichhardt
+  match: prefix
+  pattern: FUTURE SWIM LEICHHARDT
+  budget: Children and Pets
+  tax: null
+  source: llm_approved
+  added: '2026-08-02T13:16:32+00:00'
 - id: gamesmen-gamesmen-anen-penshurst
   match: exact
   pattern: GAMESMEN*GAMESMEN ANEN PENSHURST
@@ -253,6 +260,13 @@ rules:
   budget: Children and Pets
   tax: null
   source: imported_legacy
+- id: pin-2nd-abbotsford-s-ydney-olympi
+  match: exact
+  pattern: PIN* 2ND ABBOTSFORD* S YDNEY OLYMPI
+  budget: Children and Pets
+  tax: null
+  source: llm_approved
+  added: '2026-08-02T13:18:22+00:00'
 - id: pin-2nd-abbotsford-sydney-olymp
   match: exact
   pattern: PIN* 2ND ABBOTSFORD SYDNEY OLYMP
@@ -922,6 +936,13 @@ rules:
   budget: Clothing and Personal Care
   tax: null
   source: imported_legacy
+- id: new-balance
+  match: prefix
+  pattern: NEW BALANCE *
+  budget: Clothing and Personal Care
+  tax: null
+  source: llm_approved
+  added: '2026-08-02T13:18:50+00:00'
 - id: next-uk-aud-leicester-gbr-merchant
   match: exact
   pattern: 'NEXT UK AUD LEICESTER ## GBR MERCHANT'
@@ -1287,6 +1308,13 @@ rules:
   budget: Clothing and Personal Care
   tax: null
   source: imported_legacy
+- id: the-iconic
+  match: prefix
+  pattern: THE-ICONIC-
+  budget: Clothing and Personal Care
+  tax: null
+  source: llm_approved
+  added: '2026-08-02T13:19:48+00:00'
 - id: the-iconic-668-345
   match: exact
   pattern: THE-ICONIC-* 668 345
@@ -1493,6 +1521,13 @@ rules:
   budget: Communication
   tax: null
   source: imported_legacy
+- id: claude-ai-subscription
+  match: prefix
+  pattern: CLAUDE.AI SUBSCRIPTION
+  budget: Communication
+  tax: null
+  source: llm_approved
+  added: '2026-08-02T13:16:58+00:00'
 - id: cri-anime-415-503-usa-merchant
   match: exact
   pattern: 'CRI*ANIME 415-503- ## USA MERCHANT'
@@ -1603,6 +1638,13 @@ rules:
   budget: Communication
   tax: null
   source: imported_legacy
+- id: hubbl-kayo-sports
+  match: prefix
+  pattern: HUBBL - KAYO SPORTS
+  budget: Communication
+  tax: null
+  source: manual
+  added: '2026-08-02T13:17:21+00:00'
 - id: jb-hi-fi-broadway
   match: exact
   pattern: JB HI FI BROADWAY
@@ -2492,6 +2534,13 @@ rules:
   tax: null
   source: manual
   added: '2026-08-02T12:03:22+00:00'
+- id: benid-pty-ltd
+  match: prefix
+  pattern: BENID PTY LTD
+  budget: Fast Food
+  tax: null
+  source: llm_approved
+  added: '2026-08-02T13:18:43+00:00'
 - id: berry-bottle-shop-berry
   match: exact
   pattern: BERRY BOTTLE SHOP BERRY
@@ -3670,6 +3719,13 @@ rules:
   budget: Fast Food
   tax: null
   source: imported_legacy
+- id: ls-dom-panino-canada-bay
+  match: exact
+  pattern: LS DOM PANINO CANADA BAY
+  budget: Fast Food
+  tax: null
+  source: llm_approved
+  added: '2026-08-02T13:16:18+00:00'
 - id: ls-jasmine-greens-umina-beach
   match: exact
   pattern: LS JASMINE GREENS UMINA BEACH
@@ -3707,6 +3763,13 @@ rules:
   budget: Fast Food
   tax: null
   source: imported_legacy
+- id: lunetta-gelateria-pty
+  match: prefix
+  pattern: LUNETTA GELATERIA PTY
+  budget: Fast Food
+  tax: null
+  source: llm_approved
+  added: '2026-08-02T13:16:26+00:00'
 - id: maggio-s-cafe-cammeray
   match: exact
   pattern: MAGGIO'S CAFE CAMMERAY
@@ -4162,6 +4225,13 @@ rules:
   budget: Fast Food
   tax: null
   source: imported_legacy
+- id: mp-hospitality-service-five-dock
+  match: exact
+  pattern: MP HOSPITALITY SERVICE FIVE DOCK
+  budget: Fast Food
+  tax: null
+  source: llm_approved
+  added: '2026-08-02T13:18:59+00:00'
 - id: mp-hospitality-servqps-five-dock-tap-and
   match: exact
   pattern: MP HOSPITALITY SERVQPS FIVE DOCK TAP AND
@@ -4186,6 +4256,13 @@ rules:
   budget: Fast Food
   tax: null
   source: imported_legacy
+- id: mures-lower-deck-hobart
+  match: exact
+  pattern: MURES LOWER DECK HOBART
+  budget: Fast Food
+  tax: null
+  source: llm_approved
+  added: '2026-08-02T13:20:03+00:00'
 - id: nandos-australia-pty-camperdown
   match: exact
   pattern: NANDOS AUSTRALIA PTY CAMPERDOWN
@@ -4346,6 +4423,13 @@ rules:
   budget: Fast Food
   tax: null
   source: imported_legacy
+- id: petersham-bowling-cl-petersham
+  match: exact
+  pattern: PETERSHAM BOWLING CL PETERSHAM
+  budget: Fast Food
+  tax: null
+  source: llm_approved
+  added: '2026-08-02T13:20:39+00:00'
 - id: petersham-rugby-camperdown
   match: exact
   pattern: PETERSHAM RUGBY CAMPERDOWN
@@ -4932,6 +5016,13 @@ rules:
   budget: Fast Food
   tax: null
   source: imported_legacy
+- id: www-crust-crust
+  match: prefix
+  pattern: WWW.CRUST.* CRUST
+  budget: Fast Food
+  tax: null
+  source: llm_approved
+  added: '2026-08-02T13:19:29+00:00'
 - id: www-crust-crust-dr-drummone
   match: exact
   pattern: WWW.CRUST.* CRUST - DR DRUMMONE
@@ -5435,6 +5526,13 @@ rules:
   tax: null
   source: manual
   added: '2026-08-02T10:55:08+00:00'
+- id: fast-transfer-from-dobroyd-point-primary
+  match: prefix
+  pattern: FAST TRANSFER FROM DOBROYD POINT PRIMARY
+  budget: Food and Groceries
+  tax: null
+  source: manual
+  added: '2026-08-02T13:19:19+00:00'
 - id: foodhub-internet
   match: exact
   pattern: FOODHUB INTERNET
@@ -5459,6 +5557,13 @@ rules:
   budget: Food and Groceries
   tax: null
   source: imported_legacy
+- id: free-range-butchers-p
+  match: prefix
+  pattern: FREE RANGE BUTCHERS P/
+  budget: Food and Groceries
+  tax: null
+  source: llm_approved
+  added: '2026-08-02T13:19:42+00:00'
 - id: glenorie-bakery-glenorie-tap-and-pay
   match: exact
   pattern: GLENORIE BAKERY GLENORIE TAP AND PAY
@@ -5797,6 +5902,13 @@ rules:
   budget: Food and Groceries
   tax: null
   source: imported_legacy
+- id: sp-chief-nutrition-aus
+  match: prefix
+  pattern: SP CHIEF NUTRITION AUS
+  budget: Food and Groceries
+  tax: null
+  source: manual
+  added: '2026-08-02T13:20:18+00:00'
 - id: sp-ecoriginals-mona-vale
   match: exact
   pattern: SP ECORIGINALS MONA VALE
@@ -6677,6 +6789,13 @@ rules:
   budget: Medical, Health and Fitness
   tax: null
   source: imported_legacy
+- id: nswh-slhd-rpa-cp-camperdown
+  match: exact
+  pattern: NSWH SLHD RPA CP CAMPERDOWN
+  budget: Medical, Health and Fitness
+  tax: null
+  source: llm_approved
+  added: '2026-08-02T13:21:08+00:00'
 - id: perisher-pharmacy-perisher-vall
   match: exact
   pattern: PERISHER PHARMACY PERISHER VALL
@@ -6768,6 +6887,13 @@ rules:
   budget: Medical, Health and Fitness
   tax: null
   source: imported_legacy
+- id: sp-moolk-yugar
+  match: exact
+  pattern: SP MOOLK YUGAR
+  budget: Medical, Health and Fitness
+  tax: null
+  source: manual
+  added: '2026-08-02T13:18:11+00:00'
 - id: sp-naternalvitamins-eltham-north
   match: exact
   pattern: SP NATERNALVITAMINS ELTHAM NORTH
@@ -7933,6 +8059,13 @@ rules:
   budget: Recreation Travel and Entertainment
   tax: null
   source: imported_legacy
+- id: decathlon-tempe
+  match: prefix
+  pattern: DECATHLON TEMPE
+  budget: Recreation Travel and Entertainment
+  tax: null
+  source: llm_approved
+  added: '2026-08-02T13:20:52+00:00'
 - id: dfs-bali-badung-kab-00rupiah
   match: exact
   pattern: 'DFS BALI BADUNG (KAB) ## .00RUPIAH'
@@ -7970,6 +8103,13 @@ rules:
   budget: Recreation Travel and Entertainment
   tax: null
   source: imported_legacy
+- id: event-burwood
+  match: prefix
+  pattern: EVENT BURWOOD
+  budget: Recreation Travel and Entertainment
+  tax: null
+  source: llm_approved
+  added: '2026-08-02T13:20:59+00:00'
 - id: event-castle-hill-castle-hill
   match: exact
   pattern: EVENT CASTLE HILL CASTLE HILL
@@ -8351,6 +8491,13 @@ rules:
   tax: null
   source: manual
   added: '2026-08-02T10:46:38+00:00'
+- id: prime-vide-prime-vide
+  match: prefix
+  pattern: PRIME VIDE* PRIME VIDE
+  budget: Recreation Travel and Entertainment
+  tax: null
+  source: llm_approved
+  added: '2026-08-02T13:19:34+00:00'
 - id: pullman-mercure-melb-melbourne-tap-and
   match: exact
   pattern: PULLMAN & MERCURE MELB MELBOURNE TAP AND
@@ -8640,6 +8787,13 @@ rules:
   budget: Recreation Travel and Entertainment
   tax: null
   source: imported_legacy
+- id: tourism-holdings-aust-braybrook
+  match: exact
+  pattern: TOURISM HOLDINGS AUST BRAYBROOK
+  budget: Recreation Travel and Entertainment
+  tax: null
+  source: llm_approved
+  added: '2026-08-02T13:16:50+00:00'
 - id: transfer-to-andrew-walters-commbank-app
   match: exact
   pattern: 'TRANSFER TO ANDREW WALTERS COMMBANK APP '
@@ -8698,6 +8852,20 @@ rules:
   tax: null
   source: manual
   added: '2026-08-02T10:50:00+00:00'
+- id: transfer-to-v-polito-payid-phone
+  match: prefix
+  pattern: Transfer To V POLITO PayID Phone
+  budget: Recreation Travel and Entertainment
+  tax: null
+  source: manual
+  added: '2026-08-02T13:21:27+00:00'
+- id: transfer-to-v-polito-payid-phone-from-co
+  match: exact
+  pattern: TRANSFER TO V POLITO PAYID PHONE FROM CO
+  budget: Recreation Travel and Entertainment
+  tax: null
+  source: manual
+  added: '2026-08-02T13:22:17+00:00'
 - id: travel-visa-atlys-middletown-usa-merc
   match: exact
   pattern: 'TRAVEL VISA ATLYS MIDDLETOWN ## USA MERC'
@@ -8985,6 +9153,13 @@ rules:
   budget: Strata
   tax: null
   source: llm_approved
+- id: 7-eleven
+  match: prefix
+  pattern: 7-ELEVEN
+  budget: Transport and Auto
+  tax: null
+  source: llm_approved
+  added: '2026-08-02T13:20:26+00:00'
 - id: 7-eleven-camperdown
   match: exact
   pattern: 7-ELEVEN CAMPERDOWN
@@ -10168,6 +10343,13 @@ rules:
   budget: Utility and Maintenance
   tax: null
   source: imported_legacy
+- id: transfer-to-leonarda-willems-payid-phone
+  match: prefix
+  pattern: Transfer To Leonarda Willems PayID Phone
+  budget: Utility and Maintenance
+  tax: null
+  source: manual
+  added: '2026-08-02T13:22:48+00:00'
 - id: transfer-to-young-ja-no-commbank-app-eli
   match: exact
   pattern: TRANSFER TO YOUNG JA NO COMMBANK APP ELI
