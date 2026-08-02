@@ -10,6 +10,17 @@ accounts:
     institution: legacy_sheet
 
 institutions:
+  # NetBank "CSV" export: no header row; Date, Amount (signed, debits
+  # negative), Description, Balance. Columns are 0-based indexes.
+  # VERIFY against the first real file before trusting an import.
+  commbank_csv:
+    header: false
+    date_column: 0
+    date_formats: ["%d/%m/%Y"]
+    amount_column: 1
+    description_column: 2
+    balance_column: 3
+
   # Exports of the "Bank Statements Catchup" Google Sheet tabs.
   # Debit and Credit are separate positive columns; ValueChange is formula
   # junk and ignored. The Category column feeds legacy_labels on --legacy.

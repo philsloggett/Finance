@@ -23,7 +23,7 @@ def fy_of(d: date) -> str:
 
 
 def to_cents(s: str) -> int:
-    return int((Decimal(s) * 100).to_integral_value())
+    return int((Decimal(s.replace(",", "").replace("+", "")) * 100).to_integral_value())
 
 
 def txn_hash(account_id: str, date_iso: str, amount: int, raw: str, ordinal: int) -> str:
@@ -54,11 +54,22 @@ def parse_date(s: str, formats: list[str]) -> date:
 
 
 def import_file(
-    con: sqlite3.Connection, path: Path, account_id: str, legacy: bool = False
+    con: sqlite3.Connection,
+    path: Path,
+    account_id: str,
+    legacy: bool = False,
+    institution: str | None = None,
 ) -> tuple[int, int]:
-    """Import one CSV export. Returns (batch_id, rows). Re-import is a no-op."""
+    """Import one CSV export. Returns (batch_id, rows). Re-import is a no-op.
+
+    `institution` overrides the account's default column mapping — needed when
+    one account has files in more than one export format (legacy sheet vs
+    live bank CSV).
+    """
     cfg = load_config()
     inst = ensure_account(con, account_id, cfg)
+    if institution:
+        inst = cfg["institutions"][institution]
     data = path.read_bytes()
     sha = hashlib.sha256(data).hexdigest()
     existing = con.execute(
@@ -76,19 +87,27 @@ def import_file(
         )
 
     rows = []
-    with path.open(encoding="utf-8", newline="") as f:
-        for rec in csv.DictReader(f):
+    with path.open(encoding="utf-8-sig", newline="") as f:
+        reader = csv.reader(f) if inst.get("header") is False else csv.DictReader(f)
+        for rec in reader:
             raw = (rec[inst["description_column"]] or "").strip()
-            if not raw and not rec[inst["date_column"]].strip():
+            date_s = (rec[inst["date_column"]] or "").strip()
+            if not raw and not date_s:
                 continue
-            d = parse_date(rec[inst["date_column"]], inst["date_formats"])
-            amount = to_cents(rec[inst["credit_column"]] or "0") - to_cents(
-                rec[inst["debit_column"]] or "0"
-            )
+            d = parse_date(date_s, inst["date_formats"])
+            if "amount_column" in inst:  # single signed column, debits negative
+                amount = to_cents(rec[inst["amount_column"]])
+            else:
+                amount = to_cents(rec[inst["credit_column"]] or "0") - to_cents(
+                    rec[inst["debit_column"]] or "0"
+                )
             balance = None
-            if inst.get("balance_column"):
-                balance = to_cents(rec[inst["balance_column"]])
-            category = (rec.get(inst.get("category_column") or "", "") or "").strip()
+            if inst.get("balance_column") is not None:
+                bal_s = (rec[inst["balance_column"]] or "").strip()
+                balance = to_cents(bal_s) if bal_s else None
+            category = ""
+            if inst.get("category_column"):
+                category = (rec[inst["category_column"]] or "").strip()
             rows.append((d.isoformat(), amount, raw, balance, category))
 
     cur = con.execute(
