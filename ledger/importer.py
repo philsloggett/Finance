@@ -38,8 +38,13 @@ def load_config() -> dict:
 def ensure_account(con: sqlite3.Connection, account_id: str, cfg: dict) -> dict:
     acct = cfg["accounts"][account_id]
     con.execute(
-        "INSERT OR IGNORE INTO accounts (account_id, name, kind, institution) VALUES (?, ?, ?, ?)",
-        (account_id, acct["name"], acct["kind"], acct["institution"]),
+        "INSERT OR IGNORE INTO accounts (account_id, name, kind, institution, owner) "
+        "VALUES (?, ?, ?, ?, ?)",
+        (account_id, acct["name"], acct["kind"], acct["institution"], acct.get("owner")),
+    )
+    con.execute(
+        "UPDATE accounts SET owner = ? WHERE account_id = ?",
+        (acct.get("owner"), account_id),
     )
     return cfg["institutions"][acct["institution"]]
 
@@ -135,12 +140,20 @@ def import_file(
         ordinal = ordinals[key]
         ordinals[key] += 1
         txn_id = txn_hash(account_id, date_iso, amount, raw, ordinal)
-        con.execute(
-            "INSERT INTO transactions (txn_id, account_id, batch_id, date, amount, "
-            "raw_description, norm_description, balance, fy) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)",
-            (txn_id, account_id, batch_id, date_iso, amount, raw, norm.apply(raw),
-             balance, fy_of(date.fromisoformat(date_iso))),
-        )
+        try:
+            con.execute(
+                "INSERT INTO transactions (txn_id, account_id, batch_id, date, amount, "
+                "raw_description, norm_description, balance, fy) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)",
+                (txn_id, account_id, batch_id, date_iso, amount, raw, norm.apply(raw),
+                 balance, fy_of(date.fromisoformat(date_iso))),
+            )
+        except sqlite3.IntegrityError:
+            con.rollback()
+            raise SystemExit(
+                f"aborted, nothing imported: {path.name} overlaps data already in the "
+                f"ledger — first duplicate is {date_iso} {amount / 100:.2f} {raw!r}. "
+                f"Re-export a non-overlapping range or re-run with --from <ISO date>."
+            ) from None
         if legacy and category and category != "Uncategorized":
             con.execute(
                 "INSERT INTO legacy_labels (txn_id, category) VALUES (?, ?)",

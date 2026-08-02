@@ -10,7 +10,8 @@ CREATE TABLE IF NOT EXISTS accounts (
   account_id  TEXT PRIMARY KEY,
   name        TEXT NOT NULL,
   kind        TEXT NOT NULL CHECK (kind IN ('transaction','savings','credit_card')),
-  institution TEXT NOT NULL
+  institution TEXT NOT NULL,
+  owner       TEXT
 );
 
 CREATE TABLE IF NOT EXISTS import_batches (
@@ -135,6 +136,11 @@ def connect() -> sqlite3.Connection:
     con.row_factory = sqlite3.Row
     con.execute("PRAGMA foreign_keys = ON")
     con.executescript(SCHEMA)
+    # migrations for databases created before a column existed
+    cols = {r[1] for r in con.execute("PRAGMA table_info(accounts)")}
+    if "owner" not in cols:
+        con.execute("ALTER TABLE accounts ADD COLUMN owner TEXT")
+        con.commit()
     return con
 
 

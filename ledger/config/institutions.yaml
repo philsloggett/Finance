@@ -1,17 +1,29 @@
 # Accounts and per-institution CSV column mappings (spec 4.1).
+# `owner` marks whose account it is (phil | elise | joint) — every transaction
+# permanently carries its account_id, so per-person filtering is always possible.
 accounts:
   savings:
     name: CommBank transaction account
     kind: transaction
     institution: legacy_sheet
+    owner: phil
   credit:
     name: CommBank credit card
     kind: credit_card
     institution: legacy_sheet
+    owner: phil
   netbank_saver:
     name: NetBank Saver
     kind: savings
     institution: commbank_csv
+    owner: phil
+  # Elise's accounts — uncomment and adjust when her first exports arrive.
+  # Cross-owner transfers auto-null once both sides are imported (spec 6).
+  # elise_spend:
+  #   name: Elise transaction account
+  #   kind: transaction
+  #   institution: commbank_csv   # or add a new institution mapping for her bank
+  #   owner: elise
 
 institutions:
   # NetBank "CSV" export: no header row; Date, Amount (signed, debits

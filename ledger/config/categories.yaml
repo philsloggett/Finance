@@ -29,6 +29,7 @@ budget:
   - ATO payment
   - Professional Services
   - Accounting and Tax Fees
+  - Work Expenses
 
 # Ask the accountant which buckets they want before filling this in (spec 12).
 tax: []

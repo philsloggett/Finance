@@ -869,6 +869,13 @@ rules:
   tax: null
   source: manual
   added: '2026-08-02T10:47:04+00:00'
+- id: lego-australia-pty-ltd
+  match: prefix
+  pattern: LEGO AUSTRALIA PTY LTD
+  budget: Clothing and Personal Care
+  tax: null
+  source: manual
+  added: '2026-08-02T13:28:28+00:00'
 - id: local-supply-bondi-beach
   match: exact
   pattern: LOCAL SUPPLY BONDI BEACH
@@ -1009,6 +1016,13 @@ rules:
   budget: Clothing and Personal Care
   tax: null
   source: imported_legacy
+- id: pos-paypal-beaconsfieldnsw
+  match: exact
+  pattern: POS PAYPAL BEACONSFIELDNSW
+  budget: Clothing and Personal Care
+  tax: null
+  source: manual
+  added: '2026-08-02T13:30:00+00:00'
 - id: puma-birkenhead-point-drummoyne
   match: exact
   pattern: PUMA BIRKENHEAD POINT DRUMMOYNE
@@ -1546,6 +1560,13 @@ rules:
   budget: Communication
   tax: null
   source: imported_legacy
+- id: cursor-ai-powered-ide
+  match: prefix
+  pattern: CURSOR, AI POWERED IDE
+  budget: Communication
+  tax: null
+  source: manual
+  added: '2026-08-02T13:27:59+00:00'
 - id: digidirect-sydney
   match: exact
   pattern: DIGIDIRECT SYDNEY
@@ -3126,6 +3147,13 @@ rules:
   budget: Fast Food
   tax: null
   source: imported_legacy
+- id: espresso-luca-pty-ltd-surry-hills
+  match: prefix
+  pattern: ESPRESSO LUCA PTY LTD SURRY HILLS
+  budget: Fast Food
+  tax: null
+  source: llm_approved
+  added: '2026-08-02T13:28:45+00:00'
 - id: eugenes-sydney
   match: exact
   pattern: EUGENES SYDNEY
@@ -3635,6 +3663,13 @@ rules:
   tax: null
   source: manual
   added: '2026-08-02T12:09:03+00:00'
+- id: lilyfield-corner-3
+  match: prefix
+  pattern: LILYFIELD CORNER 3
+  budget: Fast Food
+  tax: null
+  source: llm_approved
+  added: '2026-08-02T13:29:06+00:00'
 - id: lions-club-of-minn-minnamurra
   match: exact
   pattern: LIONS CLUB OF MINN MINNAMURRA
@@ -4881,6 +4916,13 @@ rules:
   budget: Fast Food
   tax: null
   source: imported_legacy
+- id: tonton-bread
+  match: prefix
+  pattern: TONTON BREAD
+  budget: Fast Food
+  tax: null
+  source: llm_approved
+  added: '2026-08-02T13:28:51+00:00'
 - id: top-cellars-group-pqps-baulkham-hill
   match: exact
   pattern: TOP CELLARS GROUP PQPS BAULKHAM HILL
@@ -5041,6 +5083,13 @@ rules:
   budget: Fast Food
   tax: null
   source: imported_legacy
+- id: xun-wang-lilyfield
+  match: exact
+  pattern: XUN WANG LILYFIELD
+  budget: Fast Food
+  tax: null
+  source: llm_approved
+  added: '2026-08-02T13:28:37+00:00'
 - id: yakitori-jin-haberfield-tap-and-pay
   match: exact
   pattern: YAKITORI JIN HABERFIELD TAP AND PAY
@@ -8852,6 +8901,20 @@ rules:
   tax: null
   source: manual
   added: '2026-08-02T10:50:00+00:00'
+- id: transfer-to-sarah-polito
+  match: prefix
+  pattern: TRANSFER TO SARAH POLITO
+  budget: Recreation Travel and Entertainment
+  tax: null
+  source: manual
+  added: '2026-08-02T13:29:20+00:00'
+- id: transfer-to-sarah-polito-commbank-app-ph
+  match: exact
+  pattern: TRANSFER TO SARAH POLITO COMMBANK APP PH
+  budget: Recreation Travel and Entertainment
+  tax: null
+  source: manual
+  added: '2026-08-02T13:28:13+00:00'
 - id: transfer-to-v-polito-payid-phone
   match: prefix
   pattern: Transfer To V POLITO PayID Phone
@@ -10350,6 +10413,13 @@ rules:
   tax: null
   source: manual
   added: '2026-08-02T13:22:48+00:00'
+- id: transfer-to-leonarda-willems-payid-phone-x
+  match: exact
+  pattern: TRANSFER TO LEONARDA WILLEMS PAYID PHONE
+  budget: Utility and Maintenance
+  tax: null
+  source: manual
+  added: '2026-08-02T13:27:37+00:00'
 - id: transfer-to-young-ja-no-commbank-app-eli
   match: exact
   pattern: TRANSFER TO YOUNG JA NO COMMBANK APP ELI
