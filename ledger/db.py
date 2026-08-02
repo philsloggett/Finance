@@ -115,6 +115,14 @@ CREATE TABLE IF NOT EXISTS evidence (
   created_at  TEXT NOT NULL
 );
 
+-- Manual "look into this later" markers.
+CREATE TABLE IF NOT EXISTS flags (
+  txn_id      TEXT PRIMARY KEY REFERENCES transactions(txn_id) ON DELETE CASCADE,
+  note        TEXT NOT NULL DEFAULT '',
+  created_at  TEXT NOT NULL,
+  resolved_at TEXT
+);
+
 CREATE TABLE IF NOT EXISTS meta (
   key   TEXT PRIMARY KEY,
   value TEXT NOT NULL

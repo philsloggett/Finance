@@ -289,6 +289,39 @@ def charts(con: sqlite3.Connection) -> dict:
     return {"rows": rows, "excluded": excluded}
 
 
+def flag_txn(con: sqlite3.Connection, body: dict) -> dict:
+    con.execute(
+        "INSERT OR REPLACE INTO flags (txn_id, note, created_at, resolved_at) "
+        "VALUES (?, ?, ?, NULL)",
+        (body["txn_id"], body.get("note", ""),
+         datetime.now(timezone.utc).isoformat(timespec="seconds")),
+    )
+    con.commit()
+    return {}
+
+
+def resolve_flag(con: sqlite3.Connection, body: dict) -> dict:
+    con.execute(
+        "UPDATE flags SET resolved_at = ? WHERE txn_id = ?",
+        (datetime.now(timezone.utc).isoformat(timespec="seconds"), body["txn_id"]),
+    )
+    con.commit()
+    return {}
+
+
+def followups(con: sqlite3.Connection) -> list[dict]:
+    return [
+        dict(r)
+        for r in con.execute(
+            "SELECT f.txn_id, f.note, f.created_at, t.date, t.account_id, t.amount, "
+            "t.raw_description, c.budget_category "
+            "FROM flags f JOIN transactions t USING (txn_id) "
+            "JOIN classifications c USING (txn_id) "
+            "WHERE f.resolved_at IS NULL ORDER BY t.date DESC"
+        )
+    ]
+
+
 def reject(con: sqlite3.Connection, body: dict) -> dict:
     con.execute(
         "UPDATE suggestions SET status = 'rejected' WHERE norm_description = ?",
@@ -328,7 +361,9 @@ class Handler(BaseHTTPRequestHandler):
                 "categories": sorted(suggest.budget_enum()),
             },
             "/api/rules": lambda con: {"rules": rules_list(con)},
-            "/api/unusual": lambda con: {"unusual": unusual(con)},
+            "/api/unusual": lambda con: {
+                "unusual": unusual(con), "followups": followups(con)
+            },
             "/api/charts": charts,
             "/api/occurrences": lambda con: {"occurrences": occurrences(con, q["norm"])},
             "/api/context": lambda con: {
@@ -354,6 +389,8 @@ class Handler(BaseHTTPRequestHandler):
             "/api/override_txn": override_txn,
             "/api/reject": reject,
             "/api/rules/update": update_rule,
+            "/api/flag": flag_txn,
+            "/api/flag_resolve": resolve_flag,
         }
         fn = actions.get(self.path)
         if fn is None:

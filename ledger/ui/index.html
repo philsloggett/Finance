@@ -277,7 +277,12 @@
   </dialog>
 
   <dialog id="unu">
-    <h2>Flagged — unusual payments</h2>
+    <h2>Flagged</h2>
+    <div id="followups-wrap" style="display:none">
+      <h2 style="margin-top:0.6rem">Your follow-ups</h2>
+      <div class="panel-list" id="follow-list"></div>
+    </div>
+    <h2 style="margin-top:0.6rem">Unusual payments (automatic)</h2>
     <div class="panel-list" id="unu-list"></div>
   </dialog>
 
@@ -544,11 +549,18 @@ async function loadContext() {
       <span class="amt amount ${t.amount < 0 ? "debit" : "credit"}">${cents(t.amount)}</span>
       <span class="desc">${esc(t.raw_description.replace(/\n/g, " "))}</span>
       <span class="cat">${esc(t.budget_category ?? "—")}${t.class_source === "override" ? " ✱" : ""}</span>
-      <button data-txn="${t.txn_id}" data-cat="${esc(t.budget_category ?? "")}">override</button>
+      <button data-act="ovr" data-txn="${t.txn_id}" data-cat="${esc(t.budget_category ?? "")}">override</button>
+      <button data-act="flag" data-txn="${t.txn_id}">flag</button>
     </div>`).join("");
-  for (const b of $("ctx-list").querySelectorAll("button"))
-    b.onclick = () => openPickerFor({type: "txn", txnId: b.dataset.txn},
-      "Override this one transaction", b.dataset.cat || null);
+  for (const b of $("ctx-list").querySelectorAll("button")) {
+    if (b.dataset.act === "ovr")
+      b.onclick = () => openPickerFor({type: "txn", txnId: b.dataset.txn},
+        "Override this one transaction", b.dataset.cat || null);
+    else
+      b.onclick = async () => {
+        if (await flagTxn(b.dataset.txn)) { b.textContent = "flagged ✓"; b.disabled = true; }
+      };
+  }
   $("ctx-list").querySelector(".focal")?.scrollIntoView({block: "center"});
 }
 
@@ -777,9 +789,26 @@ function renderTrend(label, period) {
   });
 }
 
-/* ---- unusual ---- */
+/* ---- flags & unusual ---- */
+async function flagTxn(txnId) {
+  const note = prompt("Follow-up note (optional):") ?? null;
+  if (note === null) return false;           // cancelled
+  return !!(await post("/api/flag", {txn_id: txnId, note}));
+}
+
 async function loadUnusual() {
   const res = await (await fetch("/api/unusual")).json();
+  $("followups-wrap").style.display = res.followups.length ? "" : "none";
+  $("follow-list").innerHTML = res.followups.map(t => `
+    <div class="row">
+      <span class="date">${t.date}</span><span class="acct">${t.account_id}</span>
+      <span class="amt amount ${t.amount < 0 ? "debit" : "credit"}">${cents(t.amount)}</span>
+      <span class="desc">${esc(t.raw_description.replace(/\n/g, " "))}
+        ${t.note ? `<span class="why">“${esc(t.note)}”</span>` : ""}</span>
+      <span class="cat">${esc(t.budget_category ?? "—")}</span>
+      <button data-act="ctx" data-date="${t.date}" data-txn="${t.txn_id}">context</button>
+      <button data-act="resolve" data-txn="${t.txn_id}">resolve</button>
+    </div>`).join("");
   $("unu-list").innerHTML = res.unusual.map(t => `
     <div class="row">
       <span class="date">${t.date}</span><span class="acct">${t.account_id}</span>
@@ -787,10 +816,17 @@ async function loadUnusual() {
       <span class="desc">${esc(t.raw_description.replace(/\n/g, " "))}
         <span class="why">${t.reasons.map(esc).join(" · ")}</span></span>
       <span class="cat">${esc(t.budget_category ?? "—")}</span>
-      <button data-date="${t.date}" data-txn="${t.txn_id}">context</button>
+      <button data-act="ctx" data-date="${t.date}" data-txn="${t.txn_id}">context</button>
+      <button data-act="flag" data-txn="${t.txn_id}">flag</button>
     </div>`).join("");
-  for (const b of $("unu-list").querySelectorAll("button"))
-    b.onclick = () => { $("unu").close(); openContextAt(b.dataset.date, b.dataset.txn); };
+  for (const b of $("unu").querySelectorAll(".panel-list button")) {
+    if (b.dataset.act === "ctx")
+      b.onclick = () => { $("unu").close(); openContextAt(b.dataset.date, b.dataset.txn); };
+    else if (b.dataset.act === "resolve")
+      b.onclick = async () => { await post("/api/flag_resolve", {txn_id: b.dataset.txn}); loadUnusual(); };
+    else
+      b.onclick = async () => { if (await flagTxn(b.dataset.txn)) loadUnusual(); };
+  }
 }
 
 /* ---- keyboard ---- */

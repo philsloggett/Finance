@@ -153,6 +153,13 @@ rules:
   budget: Children and Pets
   tax: null
   source: imported_legacy
+- id: ipy-futureswim
+  match: prefix
+  pattern: IPY*FUTURESWIM
+  budget: Children and Pets
+  tax: null
+  source: llm_approved
+  added: '2026-08-02T11:49:57+00:00'
 - id: ipy-thegymnasticsrev-summer-hill
   match: exact
   pattern: IPY*THEGYMNASTICSREV SUMMER HILL
@@ -214,12 +221,26 @@ rules:
   budget: Children and Pets
   tax: null
   source: imported_legacy
+- id: nash-speech-pathology
+  match: prefix
+  pattern: NASH SPEECH PATHOLOGY
+  budget: Children and Pets
+  tax: null
+  source: manual
+  added: '2026-08-02T11:51:35+00:00'
 - id: nsw-registry-of-bdm-sydney
   match: exact
   pattern: NSW REGISTRY OF BDM SYDNEY
   budget: Children and Pets
   tax: null
   source: imported_legacy
+- id: petbarn
+  match: exact
+  pattern: PETBARN
+  budget: Children and Pets
+  tax: null
+  source: manual
+  added: '2026-08-02T12:08:28+00:00'
 - id: petbarn-north-ryde
   match: exact
   pattern: PETBARN NORTH RYDE
@@ -232,6 +253,13 @@ rules:
   budget: Children and Pets
   tax: null
   source: imported_legacy
+- id: pin-2nd-abbotsford-sydney-olymp
+  match: exact
+  pattern: PIN* 2ND ABBOTSFORD SYDNEY OLYMP
+  budget: Children and Pets
+  tax: null
+  source: manual
+  added: '2026-08-02T12:01:06+00:00'
 - id: return-direct-debit-my-stepping-ston-val
   match: exact
   pattern: RETURN DIRECT DEBIT MY STEPPING STON VAL
@@ -281,6 +309,13 @@ rules:
   budget: Children and Pets
   tax: null
   source: imported_legacy
+- id: sydney-academy-of-ches-burwood
+  match: exact
+  pattern: SYDNEY ACADEMY OF CHES BURWOOD
+  budget: Children and Pets
+  tax: null
+  source: manual
+  added: '2026-08-02T12:06:21+00:00'
 - id: temu-com-parramatta
   match: exact
   pattern: TEMU.COM PARRAMATTA
@@ -306,6 +341,13 @@ rules:
   budget: Children and Pets
   tax: null
   source: imported_legacy
+- id: timezone-haymarket
+  match: exact
+  pattern: TIMEZONE HAYMARKET
+  budget: Children and Pets
+  tax: null
+  source: manual
+  added: '2026-08-02T12:07:56+00:00'
 - id: toypark-australia-lysterfield
   match: exact
   pattern: TOYPARK AUSTRALIA LYSTERFIELD
@@ -392,6 +434,13 @@ rules:
   budget: Clothing and Personal Care
   tax: null
   source: imported_legacy
+- id: asics-birkenhead-point-drummoyne
+  match: exact
+  pattern: ASICS BIRKENHEAD POINT DRUMMOYNE
+  budget: Clothing and Personal Care
+  tax: null
+  source: manual
+  added: '2026-08-02T12:07:14+00:00'
 - id: asics-oceania-pty-ltd-marsden-park
   match: exact
   pattern: ASICS OCEANIA PTY LTD MARSDEN PARK
@@ -1150,6 +1199,13 @@ rules:
   budget: Clothing and Personal Care
   tax: null
   source: imported_legacy
+- id: target-glebe-02
+  match: exact
+  pattern: TARGET GLEBE 02
+  budget: Clothing and Personal Care
+  tax: null
+  source: manual
+  added: '2026-08-02T12:06:31+00:00'
 - id: target-glebe-tap-and-pay
   match: exact
   pattern: TARGET GLEBE TAP AND PAY
@@ -1162,6 +1218,13 @@ rules:
   budget: Clothing and Personal Care
   tax: null
   source: imported_legacy
+- id: target-leichhardt-02
+  match: exact
+  pattern: TARGET LEICHHARDT 02
+  budget: Clothing and Personal Care
+  tax: null
+  source: manual
+  added: '2026-08-02T12:04:48+00:00'
 - id: target-leichhardt-tap-and-pay
   match: exact
   pattern: TARGET LEICHHARDT TAP AND PAY
@@ -1187,6 +1250,13 @@ rules:
   tax: null
   source: llm_approved
   added: '2026-08-02T10:45:00+00:00'
+- id: target-williams-lanvic
+  match: exact
+  pattern: TARGET WILLIAMS LANVIC
+  budget: Clothing and Personal Care
+  tax: null
+  source: manual
+  added: '2026-08-02T12:01:36+00:00'
 - id: the-academy-brand-pl-drummoyne
   match: exact
   pattern: THE ACADEMY BRAND PL DRUMMOYNE
@@ -1470,6 +1540,13 @@ rules:
   budget: Communication
   tax: null
   source: imported_legacy
+- id: github-inc-san-franciscca-10-00-us
+  match: exact
+  pattern: 'GITHUB, INC. SAN FRANCISCCA ## 10.00 US '
+  budget: Communication
+  tax: null
+  source: manual
+  added: '2026-08-02T12:07:39+00:00'
 - id: github-inc-san-francisco-10-00us-do
   match: exact
   pattern: 'GITHUB, INC. SAN FRANCISCO ## 10.00US DO'
@@ -1506,6 +1583,13 @@ rules:
   budget: Communication
   tax: null
   source: imported_legacy
+- id: google-one-barangaroo
+  match: exact
+  pattern: GOOGLE ONE BARANGAROO
+  budget: Communication
+  tax: null
+  source: manual
+  added: '2026-08-02T12:04:40+00:00'
 - id: haberfield-news-haberfield
   match: exact
   pattern: HABERFIELD NEWS HABERFIELD
@@ -1951,6 +2035,13 @@ rules:
   budget: Communication
   tax: null
   source: imported_legacy
+- id: uber-one-membership-sydney
+  match: exact
+  pattern: UBER *ONE MEMBERSHIP SYDNEY
+  budget: Communication
+  tax: null
+  source: manual
+  added: '2026-08-02T12:03:14+00:00'
 - id: uobei-lidcombe
   match: exact
   pattern: UOBEI LIDCOMBE
@@ -2380,6 +2471,13 @@ rules:
   budget: Fast Food
   tax: null
   source: imported_legacy
+- id: bean-barrel-cafe-leichhardt-ns
+  match: exact
+  pattern: BEAN & BARREL CAFE LEICHHARDT NS
+  budget: Fast Food
+  tax: null
+  source: manual
+  added: '2026-08-02T12:03:22+00:00'
 - id: berry-bottle-shop-berry
   match: exact
   pattern: BERRY BOTTLE SHOP BERRY
@@ -2429,6 +2527,13 @@ rules:
   tax: null
   source: manual
   added: '2026-08-02T10:51:29+00:00'
+- id: bowens-bacon-egg
+  match: prefix
+  pattern: BOWENS BACON EGG
+  budget: Fast Food
+  tax: null
+  source: llm_approved
+  added: '2026-08-02T11:53:20+00:00'
 - id: bowls-burger-sur-surry-hills
   match: exact
   pattern: BOWLS & BURGER SUR SURRY HILLS
@@ -2976,6 +3081,13 @@ rules:
   budget: Fast Food
   tax: null
   source: imported_legacy
+- id: fast-transfer-from-victor-polito
+  match: prefix
+  pattern: FAST TRANSFER FROM VICTOR POLITO
+  budget: Fast Food
+  tax: null
+  source: manual
+  added: '2026-08-02T12:07:04+00:00'
 - id: fiddle-leaf-bistr-petersham
   match: exact
   pattern: FIDDLE LEAF BISTR PETERSHAM
@@ -3385,6 +3497,13 @@ rules:
   budget: Fast Food
   tax: null
   source: imported_legacy
+- id: keg-and-brew-hotel-surry-hills
+  match: exact
+  pattern: KEG AND BREW HOTEL SURRY HILLS
+  budget: Fast Food
+  tax: null
+  source: manual
+  added: '2026-08-02T12:07:48+00:00'
 - id: kfc-au-rosehill-rosehill
   match: exact
   pattern: KFC AU ROSEHILL ROSEHILL
@@ -3439,6 +3558,13 @@ rules:
   budget: Fast Food
   tax: null
   source: imported_legacy
+- id: lightcrust-bakery-leichhardt
+  match: exact
+  pattern: LIGHTCRUST BAKERY LEICHHARDT
+  budget: Fast Food
+  tax: null
+  source: manual
+  added: '2026-08-02T12:09:03+00:00'
 - id: lions-club-of-minn-minnamurra
   match: exact
   pattern: LIONS CLUB OF MINN MINNAMURRA
@@ -3529,6 +3655,13 @@ rules:
   budget: Fast Food
   tax: null
   source: imported_legacy
+- id: ls-mini-bean-pty-ltd-ermington
+  match: exact
+  pattern: LS MINI BEAN PTY LTD ERMINGTON
+  budget: Fast Food
+  tax: null
+  source: manual
+  added: '2026-08-02T12:03:41+00:00'
 - id: ls-the-boathouse-balmo-mosman
   match: exact
   pattern: LS THE BOATHOUSE BALMO MOSMAN
@@ -3957,12 +4090,26 @@ rules:
   budget: Fast Food
   tax: null
   source: imported_legacy
+- id: mezzapica-cafe-leichhardt
+  match: exact
+  pattern: MEZZAPICA CAFE LEICHHARDT
+  budget: Fast Food
+  tax: null
+  source: manual
+  added: '2026-08-02T12:01:24+00:00'
 - id: mezzapica-cakes-leichhardt
   match: exact
   pattern: MEZZAPICA CAKES LEICHHARDT
   budget: Fast Food
   tax: null
   source: imported_legacy
+- id: minro-pty-ltd-leichhardt
+  match: exact
+  pattern: MINRO PTY LTD LEICHHARDT
+  budget: Fast Food
+  tax: null
+  source: manual
+  added: '2026-08-02T12:00:29+00:00'
 - id: mitzu-north-ryde
   match: exact
   pattern: MITZU NORTH RYDE
@@ -4109,6 +4256,20 @@ rules:
   budget: Fast Food
   tax: null
   source: imported_legacy
+- id: paddys-markets-haymar-haymarket
+  match: exact
+  pattern: PADDYS MARKETS HAYMAR HAYMARKET
+  budget: Fast Food
+  tax: null
+  source: manual
+  added: '2026-08-02T12:00:47+00:00'
+- id: palace-hotel-haymarke-haymarket
+  match: exact
+  pattern: PALACE HOTEL HAYMARKE HAYMARKET
+  budget: Fast Food
+  tax: null
+  source: manual
+  added: '2026-08-02T12:01:16+00:00'
 - id: palmer-and-co-sydney
   match: exact
   pattern: PALMER AND CO SYDNEY
@@ -4479,6 +4640,13 @@ rules:
   budget: Fast Food
   tax: null
   source: imported_legacy
+- id: sydney-park-hotel-newtown
+  match: exact
+  pattern: SYDNEY PARK HOTEL NEWTOWN
+  budget: Fast Food
+  tax: null
+  source: manual
+  added: '2026-08-02T12:08:04+00:00'
 - id: sydney-rowing-club-l-abbotsford
   match: exact
   pattern: SYDNEY ROWING CLUB L ABBOTSFORD
@@ -4521,6 +4689,13 @@ rules:
   budget: Fast Food
   tax: null
   source: imported_legacy
+- id: the-eight-restaurant-haymarket
+  match: exact
+  pattern: THE EIGHT RESTAURANT HAYMARKET
+  budget: Fast Food
+  tax: null
+  source: llm_approved
+  added: '2026-08-02T11:50:40+00:00'
 - id: the-entertainment-quar-moore-park
   match: exact
   pattern: THE ENTERTAINMENT QUAR MOORE PARK
@@ -4704,6 +4879,13 @@ rules:
   budget: Fast Food
   tax: null
   source: imported_legacy
+- id: willshire-pitt-pty-lt-haymarket
+  match: exact
+  pattern: WILLSHIRE PITT PTY LT HAYMARKET
+  budget: Fast Food
+  tax: null
+  source: llm_approved
+  added: '2026-08-02T11:53:12+00:00'
 - id: woolloomooloo-bay-woolloomooloo
   match: exact
   pattern: WOOLLOOMOOLOO BAY WOOLLOOMOOLOO
@@ -4827,6 +5009,13 @@ rules:
   budget: Fines and infringements
   tax: null
   source: llm_approved
+- id: aldi-stores
+  match: prefix
+  pattern: ALDI STORES
+  budget: Food and Groceries
+  tax: null
+  source: llm_approved
+  added: '2026-08-02T11:52:53+00:00'
 - id: aldi-stores-broadway-broadway
   match: exact
   pattern: ALDI STORES - BROADWAY BROADWAY
@@ -4875,6 +5064,13 @@ rules:
   budget: Food and Groceries
   tax: null
   source: imported_legacy
+- id: bendo-s-premium-meat-five-dock
+  match: exact
+  pattern: BENDO S PREMIUM MEAT FIVE DOCK
+  budget: Food and Groceries
+  tax: null
+  source: llm_approved
+  added: '2026-08-02T11:52:21+00:00'
 - id: bendos-premium-meat-five-dock
   match: exact
   pattern: BENDOS PREMIUM MEAT FIVE DOCK
@@ -4959,6 +5155,13 @@ rules:
   budget: Food and Groceries
   tax: null
   source: imported_legacy
+- id: bws-liquor
+  match: prefix
+  pattern: BWS LIQUOR
+  budget: Food and Groceries
+  tax: null
+  source: manual
+  added: '2026-08-02T11:52:07+00:00'
 - id: coles-ashfield
   match: exact
   pattern: COLES ASHFIELD
@@ -5079,6 +5282,13 @@ rules:
   budget: Food and Groceries
   tax: null
   source: llm_approved
+- id: coles-five-dock-02
+  match: exact
+  pattern: COLES FIVE DOCK 02
+  budget: Food and Groceries
+  tax: null
+  source: manual
+  added: '2026-08-02T12:00:37+00:00'
 - id: coles-five-dock-tap-and-pay
   match: exact
   pattern: COLES FIVE DOCK TAP AND PAY
@@ -5171,6 +5381,13 @@ rules:
   budget: Food and Groceries
   tax: null
   source: imported_legacy
+- id: dan-murphy-s
+  match: prefix
+  pattern: DAN MURPHY'S
+  budget: Food and Groceries
+  tax: null
+  source: llm_approved
+  added: '2026-08-02T11:50:04+00:00'
 - id: david-gojak-s-meats-an-haberfield
   match: exact
   pattern: DAVID GOJAK S MEATS AN HABERFIELD
@@ -5346,6 +5563,13 @@ rules:
   budget: Food and Groceries
   tax: null
   source: imported_legacy
+- id: leichhardt-iga-leichhardt
+  match: exact
+  pattern: LEICHHARDT IGA LEICHHARDT
+  budget: Food and Groceries
+  tax: null
+  source: manual
+  added: '2026-08-02T12:08:55+00:00'
 - id: linton-fresh-wsale-horsley-park
   match: exact
   pattern: LINTON FRESH WSALE HORSLEY PARK
@@ -5496,6 +5720,13 @@ rules:
   budget: Food and Groceries
   tax: null
   source: imported_legacy
+- id: organic-paradiso-roselands
+  match: exact
+  pattern: ORGANIC PARADISO ROSELANDS
+  budget: Food and Groceries
+  tax: null
+  source: llm_approved
+  added: '2026-08-02T11:52:45+00:00'
 - id: palm-beach-wine-co-palm-beach
   match: exact
   pattern: PALM BEACH WINE CO PALM BEACH
@@ -5634,6 +5865,13 @@ rules:
   budget: Food and Groceries
   tax: null
   source: imported_legacy
+- id: the-trustee-for-malone-rozelle
+  match: exact
+  pattern: THE TRUSTEE FOR MALONE ROZELLE
+  budget: Food and Groceries
+  tax: null
+  source: manual
+  added: '2026-08-02T12:01:51+00:00'
 - id: thedempseygroup-ptyltd-hawthorn
   match: exact
   pattern: THEDEMPSEYGROUP PTYLTD HAWTHORN
@@ -5863,6 +6101,13 @@ rules:
   budget: Home Loan Repayments
   tax: null
   source: imported_legacy
+- id: aami-insurance
+  match: prefix
+  pattern: AAMI INSURANCE
+  budget: Insurance
+  tax: null
+  source: llm_approved
+  added: '2026-08-02T11:51:46+00:00'
 - id: insureandgo-pyrmont
   match: exact
   pattern: INSUREANDGO PYRMONT
@@ -5881,6 +6126,13 @@ rules:
   budget: Insurance
   tax: null
   source: imported_legacy
+- id: nrma-insurance
+  match: prefix
+  pattern: NRMA INSURANCE
+  budget: Insurance
+  tax: null
+  source: llm_approved
+  added: '2026-08-02T11:53:30+00:00'
 - id: return-direct-debit-lhs-limited-value-da
   match: exact
   pattern: RETURN DIRECT DEBIT LHS LIMITED VALUE DA
@@ -5968,6 +6220,13 @@ rules:
   budget: Internal
   tax: null
   source: imported_legacy
+- id: transfer-to-elise-michelle-polito
+  match: prefix
+  pattern: TRANSFER TO ELISE MICHELLE POLITO
+  budget: Internal
+  tax: null
+  source: manual
+  added: '2026-08-02T12:02:04+00:00'
 - id: transfer-to-netbank
   match: exact
   pattern: TRANSFER TO NETBANK
@@ -6054,6 +6313,13 @@ rules:
   budget: Medical, Health and Fitness
   tax: null
   source: imported_legacy
+- id: beattie-street-health-balmain
+  match: exact
+  pattern: BEATTIE STREET HEALTH BALMAIN
+  budget: Medical, Health and Fitness
+  tax: null
+  source: manual
+  added: '2026-08-02T12:06:54+00:00'
 - id: booth-street-pharmac-annandale
   match: exact
   pattern: BOOTH STREET PHARMAC ANNANDALE
@@ -6198,6 +6464,13 @@ rules:
   budget: Medical, Health and Fitness
   tax: null
   source: imported_legacy
+- id: dbs-anytime-fitness
+  match: prefix
+  pattern: DBS*ANYTIME FITNESS
+  budget: Medical, Health and Fitness
+  tax: null
+  source: llm_approved
+  added: '2026-08-02T11:49:47+00:00'
 - id: dbs-anytime-fitness-camperdown
   match: exact
   pattern: DBS*ANYTIME FITNESS - CAMPERDOWN
@@ -6330,6 +6603,13 @@ rules:
   budget: Medical, Health and Fitness
   tax: null
   source: imported_legacy
+- id: najafi-sheida-five-dock
+  match: exact
+  pattern: NAJAFI SHEIDA FIVE DOCK
+  budget: Medical, Health and Fitness
+  tax: null
+  source: manual
+  added: '2026-08-02T12:04:17+00:00'
 - id: nbx-coastalcontacts-alexandria
   match: exact
   pattern: NBX*COASTALCONTACTS ALEXANDRIA
@@ -6420,6 +6700,13 @@ rules:
   budget: Medical, Health and Fitness
   tax: null
   source: imported_legacy
+- id: sheida-najafi-five-dock
+  match: exact
+  pattern: SHEIDA NAJAFI FIVE DOCK
+  budget: Medical, Health and Fitness
+  tax: null
+  source: manual
+  added: '2026-08-02T12:05:52+00:00'
 - id: sp-decathlon-austral-tempe
   match: exact
   pattern: SP DECATHLON AUSTRAL TEMPE
@@ -6456,6 +6743,13 @@ rules:
   budget: Medical, Health and Fitness
   tax: null
   source: imported_legacy
+- id: the-dietologist-melbourne
+  match: exact
+  pattern: THE DIETOLOGIST MELBOURNE
+  budget: Medical, Health and Fitness
+  tax: null
+  source: manual
+  added: '2026-08-02T12:06:42+00:00'
 - id: the-herbal-doctors-maudsland
   match: exact
   pattern: THE HERBAL DOCTORS MAUDSLAND
@@ -6481,6 +6775,13 @@ rules:
   tax: null
   source: manual
   added: '2026-08-02T10:54:53+00:00'
+- id: transfer-to-nash-speech-pathology
+  match: prefix
+  pattern: TRANSFER TO NASH SPEECH PATHOLOGY
+  budget: Medical, Health and Fitness
+  tax: null
+  source: llm_approved
+  added: '2026-08-02T12:02:18+00:00'
 - id: transfer-to-rowan-karrer-netbank-phil-so
   match: exact
   pattern: TRANSFER TO ROWAN KARRER NETBANK PHIL SO
@@ -6531,6 +6832,13 @@ rules:
   budget: Mum inheritance
   tax: null
   source: llm_approved
+- id: fast-transfer-from-p-j-bovard
+  match: prefix
+  pattern: FAST TRANSFER FROM P J BOVARD
+  budget: Mum inheritance
+  tax: null
+  source: llm_approved
+  added: '2026-08-02T11:51:25+00:00'
 - id: fast-transfer-from-p-j-bovard-birthday
   match: exact
   pattern: FAST TRANSFER FROM P J BOVARD BIRTHDAY
@@ -7152,6 +7460,13 @@ rules:
   tax: null
   source: manual
   added: '2026-08-02T11:40:43+00:00'
+- id: tbi-trading-pl-burradoo
+  match: exact
+  pattern: TBI TRADING PL BURRADOO
+  budget: Other
+  tax: null
+  source: llm_approved
+  added: '2026-08-02T12:00:02+00:00'
 - id: the-flower-room-newtown
   match: exact
   pattern: THE FLOWER ROOM NEWTOWN
@@ -7273,6 +7588,13 @@ rules:
   budget: Public Education
   tax: null
   source: imported_legacy
+- id: spriggy-schools
+  match: prefix
+  pattern: SPRIGGY SCHOOLS
+  budget: Public Education
+  tax: null
+  source: llm_approved
+  added: '2026-08-02T11:51:09+00:00'
 - id: sydney-high-old-boys-sydney
   match: exact
   pattern: SYDNEY HIGH OLD BOYS SYDNEY
@@ -7412,6 +7734,13 @@ rules:
   budget: Recreation Travel and Entertainment
   tax: null
   source: imported_legacy
+- id: bcf-australia-auburn
+  match: exact
+  pattern: BCF AUSTRALIA AUBURN
+  budget: Recreation Travel and Entertainment
+  tax: null
+  source: manual
+  added: '2026-08-02T12:08:48+00:00'
 - id: beer-leisure-centre-marrickville
   match: exact
   pattern: BEER & LEISURE CENTRE MARRICKVILLE
@@ -7547,6 +7876,13 @@ rules:
   budget: Recreation Travel and Entertainment
   tax: null
   source: imported_legacy
+- id: discovery-rentals-springwood
+  match: exact
+  pattern: DISCOVERY RENTALS SPRINGWOOD
+  budget: Recreation Travel and Entertainment
+  tax: null
+  source: llm_approved
+  added: '2026-08-02T11:53:00+00:00'
 - id: district-8-eatery-canley-vale
   match: exact
   pattern: DISTRICT 8 EATERY CANLEY VALE
@@ -7902,6 +8238,13 @@ rules:
   budget: Recreation Travel and Entertainment
   tax: null
   source: imported_legacy
+- id: pennicott-wilderness-hobart
+  match: exact
+  pattern: PENNICOTT WILDERNESS HOBART
+  budget: Recreation Travel and Entertainment
+  tax: null
+  source: manual
+  added: '2026-08-02T12:08:38+00:00'
 - id: perisher-estore-perisher-vall
   match: exact
   pattern: PERISHER ESTORE PERISHER VALL
@@ -8391,6 +8734,13 @@ rules:
   tax: null
   source: llm_approved
   added: '2026-08-02T11:46:56+00:00'
+- id: nsw-rental-bond
+  match: prefix
+  pattern: NSW RENTAL BOND
+  budget: Rent
+  tax: null
+  source: llm_approved
+  added: '2026-08-02T11:51:56+00:00'
 - id: raine-horne-ne-rcpt
   match: prefix
   pattern: RAINE & HORNE NE RCPT
@@ -8427,6 +8777,13 @@ rules:
   budget: Rent
   tax: null
   source: imported_legacy
+- id: rentalbondboard
+  match: prefix
+  pattern: RENTALBONDBOARD
+  budget: Rent
+  tax: null
+  source: llm_approved
+  added: '2026-08-02T12:00:12+00:00'
 - id: return-direct-debit-raine-horne-ne-rcp
   match: exact
   pattern: RETURN DIRECT DEBIT RAINE & HORNE NE RCP
@@ -9053,6 +9410,13 @@ rules:
   budget: Transport and Auto
   tax: null
   source: imported_legacy
+- id: hertz
+  match: prefix
+  pattern: HERTZ
+  budget: Transport and Auto
+  tax: null
+  source: llm_approved
+  added: '2026-08-02T12:03:30+00:00'
 - id: inner-west-council-petersham
   match: exact
   pattern: INNER WEST COUNCIL PETERSHAM
@@ -9096,6 +9460,13 @@ rules:
   budget: Transport and Auto
   tax: null
   source: imported_legacy
+- id: metro-petroleum
+  match: prefix
+  pattern: METRO PETROLEUM
+  budget: Transport and Auto
+  tax: null
+  source: llm_approved
+  added: '2026-08-02T11:51:17+00:00'
 - id: metro-petroleum-haber-rosehill
   match: exact
   pattern: METRO PETROLEUM (HABER ROSEHILL
@@ -9144,6 +9515,13 @@ rules:
   budget: Transport and Auto
   tax: null
   source: imported_legacy
+- id: mosman-municapl-coun-mosman
+  match: exact
+  pattern: MOSMAN MUNICAPL COUN MOSMAN
+  budget: Transport and Auto
+  tax: null
+  source: manual
+  added: '2026-08-02T12:04:29+00:00'
 - id: mycar-annandale-tap-and-pay
   match: exact
   pattern: MYCAR ANNANDALE TAP AND PAY
@@ -9327,6 +9705,13 @@ rules:
   tax: null
   source: manual
   added: '2026-08-02T10:55:55+00:00'
+- id: transport-nsw-etoll-parramatta
+  match: exact
+  pattern: TRANSPORT NSW ETOLL PARRAMATTA
+  budget: Transport and Auto
+  tax: null
+  source: manual
+  added: '2026-08-02T12:08:12+00:00'
 - id: transportfornsw-opal-chippendale
   match: exact
   pattern: TRANSPORTFORNSW OPAL CHIPPENDALE
@@ -9375,6 +9760,13 @@ rules:
   budget: Transport and Auto
   tax: null
   source: imported_legacy
+- id: webjet
+  match: exact
+  pattern: WEBJET
+  budget: Transport and Auto
+  tax: null
+  source: manual
+  added: '2026-08-02T12:08:21+00:00'
 - id: westside-petroleum-hel-helensburgh
   match: exact
   pattern: WESTSIDE PETROLEUM HEL HELENSBURGH
