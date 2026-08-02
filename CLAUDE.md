@@ -16,9 +16,23 @@ build tooling (no npm/bundlers) unless it becomes genuinely necessary.
 
 - Bank exports land in `ledger/raw/` (gitignored — never commit account data, and never
   commit `ledger.db`).
-- Prior classification work lives in a Google Sheet
-  (id `17U5ddFSZ0UqOdbYsKrHzO-vyYoCMnitamxlznKQhWro`) — the **CREDIT** and **SAVINGS**
-  tables are the legacy input for the rule seeder (spec §4.2). Ignore the summary tabs.
+- Prior classification work lives in the "Bank Statements Catchup" Google Sheet
+  (id `17U5ddFSZ0UqOdbYsKrHzO-vyYoCMnitamxlznKQhWro`); its **SAVINGS** and **CREDIT** tabs
+  are exported to `ledger/raw/legacy/*.csv` and are the input for the rule seeder
+  (spec §4.2). Ignore the summary tabs.
+  - Columns: `Date, Text, Source Statement, Debit, Credit, ValueChange, Category, Tags`
+    (SAVINGS also has `AI Generated`). `ValueChange` exported as formula strings — ignore
+    it, derive amount from `Debit`/`Credit`. Debits and credits are separate positive
+    columns.
+  - SAVINGS: ~1,654 rows, 2019-05 → 2025-01, CommBank transaction account
+    (`Statements*.pdf` sources), only ~35% categorised.
+  - CREDIT: ~8,089 rows, 2019-06 → 2025-04, credit card
+    (`5353…597.NN.pdf` / `Statement*.pdf` sources), ~84% categorised. Its `Text` is
+    already title-cased/cleaned, unlike SAVINGS' raw bank strings — normalisation must
+    handle both.
+  - The `Categories` tab (25 entries, incl. `Uncategorized` and `Internal`) seeds the
+    budget taxonomy in `categories.yaml`. `Internal` marks transfers (spec §6);
+    `Uncategorized` means unclassified, not a category.
 
 ## Git
 
