@@ -1,0 +1,10 @@
+# Claude Code local settings
+.claude/settings.local.json
+
+# OS cruft
+Thumbs.db
+Desktop.ini
+
+# Office temp files
+~$*
+*.tmp
